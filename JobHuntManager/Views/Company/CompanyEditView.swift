@@ -36,10 +36,21 @@ struct CompanyEditView: View {
                         }
                     }
 
-                    Picker("志望度", selection: $priority) {
-                        ForEach(0...3, id: \.self) { level in
-                            Text(String(repeating: "★", count: level) + String(repeating: "☆", count: 3 - level))
-                                .tag(level)
+                    HStack {
+                        Text("志望度")
+                        Spacer()
+                        HStack(spacing: 10) {
+                            ForEach(1...3, id: \.self) { level in
+                                Button {
+                                    // 同じドットを再タップしたら一段下げられるようにする
+                                    priority = (priority == level) ? level - 1 : level
+                                } label: {
+                                    Circle()
+                                        .fill(level <= priority ? Color.signal : Color.surfaceBorder)
+                                        .frame(width: 18, height: 18)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
                 }

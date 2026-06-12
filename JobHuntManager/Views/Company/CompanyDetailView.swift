@@ -19,6 +19,16 @@ struct CompanyDetailView: View {
         company.submissions.sorted { $0.deadline < $1.deadline }
     }
 
+    /// URL文字列をスキーム付きのURLに正規化（スキームがなければ https を補う）
+    private var normalizedURL: URL? {
+        let trimmed = company.urlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
+            return URL(string: trimmed)
+        }
+        return URL(string: "https://\(trimmed)")
+    }
+
     var body: some View {
         List {
             Section {
@@ -35,7 +45,21 @@ struct CompanyDetailView: View {
                             }
                         }
                         Spacer()
-                        StatusPillView(status: company.status)
+                        Menu {
+                            ForEach(SelectionStatus.allCases.sorted { $0.sortOrder < $1.sortOrder }) { status in
+                                Button {
+                                    withAnimation { company.status = status }
+                                } label: {
+                                    if status == company.status {
+                                        Label(status.label, systemImage: "checkmark")
+                                    } else {
+                                        Text(status.label)
+                                    }
+                                }
+                            }
+                        } label: {
+                            StatusPillView(status: company.status)
+                        }
                     }
 
                     HStack(spacing: 8) {
@@ -45,14 +69,16 @@ struct CompanyDetailView: View {
                         PriorityDotsView(priority: company.priority)
                     }
 
-                    if !company.urlString.isEmpty {
-                        HStack(alignment: .top, spacing: 6) {
-                            Text("URL")
-                                .font(.caption)
-                                .foregroundStyle(.textSecondary)
-                            Text(company.urlString)
-                                .font(.mono)
-                                .foregroundStyle(.textPrimary)
+                    if let url = normalizedURL {
+                        Link(destination: url) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "link")
+                                    .font(.caption)
+                                Text(company.urlString)
+                                    .font(.mono)
+                                    .lineLimit(1)
+                            }
+                            .foregroundStyle(.signal)
                         }
                     }
 
@@ -115,6 +141,16 @@ struct CompanyDetailView: View {
                         }
                         .buttonStyle(.plain)
                         .listRowBackground(Color.surfaceRaised)
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            if submission.status != .submitted {
+                                Button {
+                                    withAnimation { submission.status = .submitted }
+                                } label: {
+                                    Label("提出済", systemImage: "checkmark.circle.fill")
+                                }
+                                .tint(.statusGreen)
+                            }
+                        }
                     }
                     .onDelete(perform: deleteSubmissions)
                 }
@@ -205,10 +241,10 @@ private struct SubmissionRow: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                Text(submission.deadline.formattedDate)
-                    .font(.mono)
+                Text(submission.status == .submitted ? "提出済" : submission.deadline.relativeDeadlineLabel)
+                    .font(.pillLabel)
                     .foregroundStyle(submission.urgency.color)
-                Text(submission.status.label)
+                Text(submission.deadline.formattedDate)
                     .font(.caption2)
                     .foregroundStyle(.textSecondary)
             }

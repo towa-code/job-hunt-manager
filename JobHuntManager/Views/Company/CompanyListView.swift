@@ -6,23 +6,41 @@ struct CompanyListView: View {
     private var companies: [Company]
 
     @State private var statusFilter: SelectionStatus?
+    @State private var searchText = ""
     @State private var isShowingAddSheet = false
 
     private var filteredCompanies: [Company] {
-        guard let statusFilter else { return companies }
-        return companies.filter { $0.status == statusFilter }
+        var result = companies
+        if let statusFilter {
+            result = result.filter { $0.status == statusFilter }
+        }
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty {
+            result = result.filter {
+                $0.name.localizedCaseInsensitiveContains(trimmed)
+                    || $0.industry.localizedCaseInsensitiveContains(trimmed)
+            }
+        }
+        return result
     }
 
     var body: some View {
         NavigationStack {
-            Group {
+            VStack(spacing: 0) {
+                FilterChipsRow(selection: $statusFilter)
+                    .padding(.vertical, 8)
+
                 if filteredCompanies.isEmpty {
                     ContentUnavailableView(
-                        "企業が登録されていません",
+                        companies.isEmpty ? "企業が登録されていません" : "該当する企業がありません",
                         systemImage: "building.2",
-                        description: Text("右上の＋ボタンから企業を追加しましょう")
+                        description: Text(
+                            companies.isEmpty
+                                ? "右上の＋ボタンから企業を追加しましょう"
+                                : "検索条件やフィルタを変えてみてください"
+                        )
                     )
-                    .background(AppBackground())
+                    .frame(maxHeight: .infinity)
                 } else {
                     List {
                         ForEach(filteredCompanies) { company in
@@ -36,25 +54,15 @@ struct CompanyListView: View {
                     }
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
-                    .background(AppBackground())
                 }
             }
+            .background(AppBackground())
             .navigationTitle("企業")
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "企業名・業界で検索")
             .navigationDestination(for: Company.self) { company in
                 CompanyDetailView(company: company)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        Button("すべて") { statusFilter = nil }
-                        Divider()
-                        ForEach(SelectionStatus.allCases.sorted { $0.sortOrder < $1.sortOrder }) { status in
-                            Button(status.label) { statusFilter = status }
-                        }
-                    } label: {
-                        Label(statusFilter?.label ?? "すべて", systemImage: "line.3.horizontal.decrease.circle")
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isShowingAddSheet = true
@@ -68,6 +76,67 @@ struct CompanyListView: View {
             }
         }
         .tint(.signal)
+    }
+}
+
+/// ステータスで絞り込む横スクロールのチップ列
+private struct FilterChipsRow: View {
+    @Binding var selection: SelectionStatus?
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                FilterChip(label: "すべて", isSelected: selection == nil) {
+                    selection = nil
+                }
+                ForEach(SelectionStatus.allCases.sorted { $0.sortOrder < $1.sortOrder }) { status in
+                    FilterChip(
+                        label: status.label,
+                        dotColor: status.indicatorColor,
+                        isSelected: selection == status
+                    ) {
+                        selection = selection == status ? nil : status
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+    }
+}
+
+private struct FilterChip: View {
+    let label: String
+    var dotColor: Color?
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 5) {
+                if let dotColor {
+                    Circle()
+                        .fill(dotColor)
+                        .frame(width: 6, height: 6)
+                }
+                Text(label)
+                    .font(.pillLabel)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(
+                isSelected ? Color.signal.opacity(0.15) : Color.surfaceRaised,
+                in: Capsule()
+            )
+            .overlay(
+                Capsule().strokeBorder(
+                    isSelected ? Color.signal : Color.surfaceBorder,
+                    lineWidth: 1
+                )
+            )
+            .foregroundStyle(isSelected ? Color.signal : Color.textPrimary)
+        }
+        .buttonStyle(.plain)
+        .animation(.easeOut(duration: 0.15), value: isSelected)
     }
 }
 
@@ -88,7 +157,14 @@ private struct CompanyRow: View {
                 PriorityDotsView(priority: company.priority)
             }
             Spacer()
-            StatusPillView(status: company.status)
+            VStack(alignment: .trailing, spacing: 6) {
+                StatusPillView(status: company.status)
+                if let nextEvent = company.events.filter({ $0.date >= Date() }).min(by: { $0.date < $1.date }) {
+                    Text("次: \(nextEvent.date.formattedShortDateTime)")
+                        .font(.caption2)
+                        .foregroundStyle(.textSecondary)
+                }
+            }
         }
         .cardStyle()
     }

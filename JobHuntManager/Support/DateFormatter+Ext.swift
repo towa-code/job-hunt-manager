@@ -34,4 +34,23 @@ extension Date {
         formatter.locale = Locale(identifier: "ja_JP")
         return formatter
     }()
+
+    /// 今日から締切日までの残り日数（過去ならマイナス）
+    var daysFromToday: Int {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.startOfDay(for: self)
+        return calendar.dateComponents([.day], from: start, to: end).day ?? 0
+    }
+
+    /// 「今日」「あと3日」「2日超過」のような相対表示
+    var relativeDeadlineLabel: String {
+        let days = daysFromToday
+        switch days {
+        case 0: return "今日"
+        case 1: return "明日"
+        case 2...: return "あと\(days)日"
+        default: return "\(-days)日超過"
+        }
+    }
 }

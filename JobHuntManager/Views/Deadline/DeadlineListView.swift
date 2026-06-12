@@ -13,27 +13,37 @@ struct DeadlineListView: View {
         return filtered.sorted { $0.deadline < $1.deadline }
     }
 
+    private var overdue: [Submission] {
+        filteredSubmissions.filter { $0.urgency == .overdue }
+    }
+
+    private var soon: [Submission] {
+        filteredSubmissions.filter { $0.urgency == .soon }
+    }
+
+    private var later: [Submission] {
+        filteredSubmissions.filter { $0.urgency == .normal || $0.urgency == .done }
+    }
+
     var body: some View {
         NavigationStack {
             Group {
                 if filteredSubmissions.isEmpty {
                     ContentUnavailableView(
-                        "提出物がありません",
-                        systemImage: "doc.text",
-                        description: Text("企業詳細から提出物を追加しましょう")
+                        showOnlyUnsubmitted ? "未提出の提出物はありません" : "提出物がありません",
+                        systemImage: showOnlyUnsubmitted ? "checkmark.circle" : "doc.text",
+                        description: Text(
+                            showOnlyUnsubmitted
+                                ? "すべて提出済みです。おつかれさまでした！"
+                                : "企業詳細から提出物を追加しましょう"
+                        )
                     )
                     .background(AppBackground())
                 } else {
-                    List(filteredSubmissions) { submission in
-                        if let company = submission.company {
-                            NavigationLink(value: company) {
-                                DeadlineRow(submission: submission)
-                            }
-                            .listRowBackground(Color.surfaceRaised)
-                        } else {
-                            DeadlineRow(submission: submission)
-                                .listRowBackground(Color.surfaceRaised)
-                        }
+                    List {
+                        deadlineSection(title: "期限超過", items: overdue, accent: .statusRed)
+                        deadlineSection(title: "3日以内", items: soon, accent: .signal)
+                        deadlineSection(title: "それ以降", items: later, accent: nil)
                     }
                     .scrollContentBackground(.hidden)
                     .background(AppBackground())
@@ -45,13 +55,56 @@ struct DeadlineListView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Toggle("未提出のみ", isOn: $showOnlyUnsubmitted)
+                    Toggle("未提出のみ", isOn: $showOnlyUnsubmitted.animation())
                         .toggleStyle(.button)
                         .tint(.signal)
                 }
             }
         }
         .tint(.signal)
+    }
+
+    @ViewBuilder
+    private func deadlineSection(title: String, items: [Submission], accent: Color?) -> some View {
+        if !items.isEmpty {
+            Section {
+                ForEach(items) { submission in
+                    Group {
+                        if let company = submission.company {
+                            NavigationLink(value: company) {
+                                DeadlineRow(submission: submission)
+                            }
+                        } else {
+                            DeadlineRow(submission: submission)
+                        }
+                    }
+                    .listRowBackground(Color.surfaceRaised)
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        if submission.status != .submitted {
+                            Button {
+                                withAnimation {
+                                    submission.status = .submitted
+                                }
+                            } label: {
+                                Label("提出済", systemImage: "checkmark.circle.fill")
+                            }
+                            .tint(.statusGreen)
+                        }
+                    }
+                }
+            } header: {
+                HStack(spacing: 6) {
+                    if let accent {
+                        Circle()
+                            .fill(accent)
+                            .frame(width: 6, height: 6)
+                    }
+                    Text(title)
+                        .font(.heading(13))
+                        .foregroundStyle(accent ?? .textSecondary)
+                }
+            }
+        }
     }
 }
 
@@ -68,17 +121,17 @@ private struct DeadlineRow: View {
                         .font(.caption)
                         .foregroundStyle(.textSecondary)
                 }
-                Text(submission.type.label)
+                Text("\(submission.type.label) ・ \(submission.status.label)")
                     .font(.caption2)
                     .foregroundStyle(.textSecondary)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                Text(submission.deadline.formattedDate)
-                    .font(.mono)
+                Text(submission.deadline.relativeDeadlineLabel)
+                    .font(.pillLabel)
                     .foregroundStyle(submission.urgency.color)
-                Text(submission.status.label)
-                    .font(.caption)
+                Text(submission.deadline.formattedDate)
+                    .font(.caption2)
                     .foregroundStyle(.textSecondary)
             }
         }
