@@ -1,0 +1,528 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D165439663F09B9CE2F31CF /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3BA44B58E2B5B4FFC56947 /* RootTabView.swift */; };
+		384AD8A367762D8291F3CDDA /* SubmissionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29589734F45E42902DDADD9 /* SubmissionEditView.swift */; };
+		554907BD583EC098622BAFA5 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109CC097D4091AE77F563F98 /* Company.swift */; };
+		5BC5CBE112D9FB9F032BD36A /* SubmissionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AEAEF7215AEE892EB12222E /* SubmissionTests.swift */; };
+		65D77842C3C680DBA385C852 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE506A2B3E0FC6C1D0A5BDD /* HomeView.swift */; };
+		8DFE434DD7CC2B75952424EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FB7E2F63726468B336CF914 /* Assets.xcassets */; };
+		8E830270848EC2E6F5819AC6 /* CompanyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A595494C82B943DE1836E08D /* CompanyListView.swift */; };
+		9ACDE7F11BEDC9655B709B9C /* CompanyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93708CAEBC21F29666451C70 /* CompanyDetailView.swift */; };
+		A5F0D18E45EBC3215B16A8B1 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C587E9242B096631E9B357 /* EventEditView.swift */; };
+		B0401EE2A7CCE2E47E0A6225 /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A4CBA1A1324CFEAB67D111 /* Submission.swift */; };
+		BA2A0D95C997A28A10F2EF23 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02373D6A87802E8328B90B5C /* Theme.swift */; };
+		BC8B448980EFC996C8564E5A /* DeadlineListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD732EB95B4494853D148768 /* DeadlineListView.swift */; };
+		CB0D7CE352C8E8CBA21EDC28 /* DateFormatter+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD309A252BA68EE96FA8D62 /* DateFormatter+Ext.swift */; };
+		D236DAA5E9664319999E2FF1 /* JobEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6390AE359C77B28E5816C570 /* JobEvent.swift */; };
+		EAB609166B7EADE1509E4C10 /* JobHuntManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E075A6B7AE6AE318A5BD1 /* JobHuntManagerApp.swift */; };
+		EF99794C85DDC60D258E6517 /* CompanyEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392A0C586CD0F3F876603A4 /* CompanyEditView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44D1878071CCB1236ACD51E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 95AC085F20305BE70046A71E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D86075ECBE1B90FD7AC62FE9;
+			remoteInfo = JobHuntManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01A4CBA1A1324CFEAB67D111 /* Submission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Submission.swift; sourceTree = "<group>"; };
+		02373D6A87802E8328B90B5C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		109CC097D4091AE77F563F98 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		228E075A6B7AE6AE318A5BD1 /* JobHuntManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobHuntManagerApp.swift; sourceTree = "<group>"; };
+		26C587E9242B096631E9B357 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
+		3FB7E2F63726468B336CF914 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5392A0C586CD0F3F876603A4 /* CompanyEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyEditView.swift; sourceTree = "<group>"; };
+		6390AE359C77B28E5816C570 /* JobEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobEvent.swift; sourceTree = "<group>"; };
+		6AEAEF7215AEE892EB12222E /* SubmissionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionTests.swift; sourceTree = "<group>"; };
+		6EE506A2B3E0FC6C1D0A5BDD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		7C7D54C0C85704E025F2D8DC /* JobHuntManager.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = JobHuntManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F3BA44B58E2B5B4FFC56947 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		93708CAEBC21F29666451C70 /* CompanyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyDetailView.swift; sourceTree = "<group>"; };
+		A29589734F45E42902DDADD9 /* SubmissionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionEditView.swift; sourceTree = "<group>"; };
+		A595494C82B943DE1836E08D /* CompanyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyListView.swift; sourceTree = "<group>"; };
+		B82DC1803FC4718ABB372BC2 /* JobHuntManagerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = JobHuntManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD732EB95B4494853D148768 /* DeadlineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineListView.swift; sourceTree = "<group>"; };
+		FD1A99E7A6A1FFF2EA548890 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FDD309A252BA68EE96FA8D62 /* DateFormatter+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Ext.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		138865054D66C1DDDA83B26E = {
+			isa = PBXGroup;
+			children = (
+				5950B13186F64A026DA2B826 /* JobHuntManager */,
+				6AD9E78F387CD5AC097A7B06 /* JobHuntManagerTests */,
+				6119F599BE0BCF7890308901 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		242473161C0AD2742FBCD0B4 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				26C587E9242B096631E9B357 /* EventEditView.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		253398411258D8A5C75945E3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8F3BA44B58E2B5B4FFC56947 /* RootTabView.swift */,
+				B8B35FBD59991A5372A1783E /* Company */,
+				52830DB828EA64DD15CD9335 /* Deadline */,
+				242473161C0AD2742FBCD0B4 /* Event */,
+				72022AB4B5667BE18BAD2122 /* Home */,
+				703051F264357A89930C7D11 /* Submission */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		52830DB828EA64DD15CD9335 /* Deadline */ = {
+			isa = PBXGroup;
+			children = (
+				DD732EB95B4494853D148768 /* DeadlineListView.swift */,
+			);
+			path = Deadline;
+			sourceTree = "<group>";
+		};
+		5950B13186F64A026DA2B826 /* JobHuntManager */ = {
+			isa = PBXGroup;
+			children = (
+				3FB7E2F63726468B336CF914 /* Assets.xcassets */,
+				FD1A99E7A6A1FFF2EA548890 /* Info.plist */,
+				228E075A6B7AE6AE318A5BD1 /* JobHuntManagerApp.swift */,
+				D54BDA39C4FA870F2219F566 /* Models */,
+				CB87E54F596ECD53A2D97FF7 /* Support */,
+				253398411258D8A5C75945E3 /* Views */,
+			);
+			path = JobHuntManager;
+			sourceTree = "<group>";
+		};
+		6119F599BE0BCF7890308901 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7C7D54C0C85704E025F2D8DC /* JobHuntManager.app */,
+				B82DC1803FC4718ABB372BC2 /* JobHuntManagerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6AD9E78F387CD5AC097A7B06 /* JobHuntManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				6AEAEF7215AEE892EB12222E /* SubmissionTests.swift */,
+			);
+			path = JobHuntManagerTests;
+			sourceTree = "<group>";
+		};
+		703051F264357A89930C7D11 /* Submission */ = {
+			isa = PBXGroup;
+			children = (
+				A29589734F45E42902DDADD9 /* SubmissionEditView.swift */,
+			);
+			path = Submission;
+			sourceTree = "<group>";
+		};
+		72022AB4B5667BE18BAD2122 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				6EE506A2B3E0FC6C1D0A5BDD /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		B8B35FBD59991A5372A1783E /* Company */ = {
+			isa = PBXGroup;
+			children = (
+				93708CAEBC21F29666451C70 /* CompanyDetailView.swift */,
+				5392A0C586CD0F3F876603A4 /* CompanyEditView.swift */,
+				A595494C82B943DE1836E08D /* CompanyListView.swift */,
+			);
+			path = Company;
+			sourceTree = "<group>";
+		};
+		CB87E54F596ECD53A2D97FF7 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				FDD309A252BA68EE96FA8D62 /* DateFormatter+Ext.swift */,
+				02373D6A87802E8328B90B5C /* Theme.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		D54BDA39C4FA870F2219F566 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				109CC097D4091AE77F563F98 /* Company.swift */,
+				6390AE359C77B28E5816C570 /* JobEvent.swift */,
+				01A4CBA1A1324CFEAB67D111 /* Submission.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D86075ECBE1B90FD7AC62FE9 /* JobHuntManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE62E55C81F471500DA617B0 /* Build configuration list for PBXNativeTarget "JobHuntManager" */;
+			buildPhases = (
+				2300CDDC0B4FADE8E3381E2C /* Sources */,
+				EEF6F8F1A0FD46C77B82B416 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JobHuntManager;
+			packageProductDependencies = (
+			);
+			productName = JobHuntManager;
+			productReference = 7C7D54C0C85704E025F2D8DC /* JobHuntManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F7BC2310B37DA32C3C5FD37F /* JobHuntManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6862AED948391ED6F0A4D9FA /* Build configuration list for PBXNativeTarget "JobHuntManagerTests" */;
+			buildPhases = (
+				9B21BA821CAA2D38333CC4C3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3569BD0D7DA971A085266B99 /* PBXTargetDependency */,
+			);
+			name = JobHuntManagerTests;
+			packageProductDependencies = (
+			);
+			productName = JobHuntManagerTests;
+			productReference = B82DC1803FC4718ABB372BC2 /* JobHuntManagerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		95AC085F20305BE70046A71E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D86075ECBE1B90FD7AC62FE9 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					F7BC2310B37DA32C3C5FD37F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C5BE1E8CA969EBDB91E42A99 /* Build configuration list for PBXProject "JobHuntManager" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 138865054D66C1DDDA83B26E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6119F599BE0BCF7890308901 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D86075ECBE1B90FD7AC62FE9 /* JobHuntManager */,
+				F7BC2310B37DA32C3C5FD37F /* JobHuntManagerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EEF6F8F1A0FD46C77B82B416 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DFE434DD7CC2B75952424EF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2300CDDC0B4FADE8E3381E2C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				554907BD583EC098622BAFA5 /* Company.swift in Sources */,
+				9ACDE7F11BEDC9655B709B9C /* CompanyDetailView.swift in Sources */,
+				EF99794C85DDC60D258E6517 /* CompanyEditView.swift in Sources */,
+				8E830270848EC2E6F5819AC6 /* CompanyListView.swift in Sources */,
+				CB0D7CE352C8E8CBA21EDC28 /* DateFormatter+Ext.swift in Sources */,
+				BC8B448980EFC996C8564E5A /* DeadlineListView.swift in Sources */,
+				A5F0D18E45EBC3215B16A8B1 /* EventEditView.swift in Sources */,
+				65D77842C3C680DBA385C852 /* HomeView.swift in Sources */,
+				D236DAA5E9664319999E2FF1 /* JobEvent.swift in Sources */,
+				EAB609166B7EADE1509E4C10 /* JobHuntManagerApp.swift in Sources */,
+				0D165439663F09B9CE2F31CF /* RootTabView.swift in Sources */,
+				B0401EE2A7CCE2E47E0A6225 /* Submission.swift in Sources */,
+				384AD8A367762D8291F3CDDA /* SubmissionEditView.swift in Sources */,
+				BA2A0D95C997A28A10F2EF23 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B21BA821CAA2D38333CC4C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BC5CBE112D9FB9F032BD36A /* SubmissionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3569BD0D7DA971A085266B99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D86075ECBE1B90FD7AC62FE9 /* JobHuntManager */;
+			targetProxy = 44D1878071CCB1236ACD51E1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2770BC852481A5BF69ABBBC5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3B112E2C7558B354A2FB3775 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.towa.jobhuntmanager.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobHuntManager.app/JobHuntManager";
+			};
+			name = Debug;
+		};
+		777489C3D28FE6A77A87E92A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.towa.jobhuntmanager.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobHuntManager.app/JobHuntManager";
+			};
+			name = Release;
+		};
+		8124E9128FCAE37F63EAAE4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETSCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = JobHuntManager/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.towa.jobhuntmanager;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B1BFB983F076C11EB39009EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		DF86DA56DB1F81EF76A2AA41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETSCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = JobHuntManager/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.towa.jobhuntmanager;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6862AED948391ED6F0A4D9FA /* Build configuration list for PBXNativeTarget "JobHuntManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B112E2C7558B354A2FB3775 /* Debug */,
+				777489C3D28FE6A77A87E92A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C5BE1E8CA969EBDB91E42A99 /* Build configuration list for PBXProject "JobHuntManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2770BC852481A5BF69ABBBC5 /* Debug */,
+				B1BFB983F076C11EB39009EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CE62E55C81F471500DA617B0 /* Build configuration list for PBXNativeTarget "JobHuntManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8124E9128FCAE37F63EAAE4D /* Debug */,
+				DF86DA56DB1F81EF76A2AA41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 95AC085F20305BE70046A71E /* Project object */;
+}
