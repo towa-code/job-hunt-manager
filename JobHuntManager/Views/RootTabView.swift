@@ -17,6 +17,11 @@ struct RootTabView: View {
                 .tabItem {
                     Label("締切", systemImage: "clock.badge.exclamationmark")
                 }
+
+            CalendarView()
+                .tabItem {
+                    Label("カレンダー", systemImage: "calendar")
+                }
         }
         .tint(.signal)
         .toolbarBackground(Color.surface, for: .tabBar)

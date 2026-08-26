@@ -5,7 +5,7 @@ import SwiftData
 enum EventType: String, Codable, CaseIterable, Identifiable {
     case briefing = "説明会"
     case interview = "面接"
-    case writtenTest = "筆記"
+    case test = "テスト"
     case obVisit = "OB訪問"
     case other = "その他"
 

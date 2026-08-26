@@ -49,7 +49,7 @@ struct JobHuntManagerApp: App {
 
         context.insert(JobEvent(title: "二次面接", type: .interview, date: days(2, hour: 14), place: "本社 12F", company: sakura))
         context.insert(JobEvent(title: "OB訪問", type: .obVisit, date: days(5, hour: 18), place: "オンライン", company: sakura))
-        context.insert(JobEvent(title: "Webテスト", type: .writtenTest, date: days(4, hour: 9), company: hinata))
+        context.insert(JobEvent(title: "Webテスト", type: .test, date: days(4, hour: 9), company: hinata))
         context.insert(JobEvent(title: "会社説明会", type: .briefing, date: days(9, hour: 13), place: "Zoom", company: aoba))
 
         context.insert(Submission(title: "本選考ES", type: .entrySheet, deadline: days(-1), status: .inProgress, company: hinata))

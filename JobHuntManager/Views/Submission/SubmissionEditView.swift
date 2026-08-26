@@ -86,7 +86,6 @@ struct SubmissionEditView: View {
                 company: company
             )
             modelContext.insert(newSubmission)
-            company.submissions.append(newSubmission)
         }
         dismiss()
     }

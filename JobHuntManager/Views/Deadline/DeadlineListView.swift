@@ -22,7 +22,11 @@ struct DeadlineListView: View {
     }
 
     private var later: [Submission] {
-        filteredSubmissions.filter { $0.urgency == .normal || $0.urgency == .done }
+        filteredSubmissions.filter { $0.urgency == .normal }
+    }
+
+    private var done: [Submission] {
+        filteredSubmissions.filter { $0.urgency == .done }
     }
 
     var body: some View {
@@ -44,6 +48,7 @@ struct DeadlineListView: View {
                         deadlineSection(title: "期限超過", items: overdue, accent: .statusRed)
                         deadlineSection(title: "3日以内", items: soon, accent: .signal)
                         deadlineSection(title: "それ以降", items: later, accent: nil)
+                        deadlineSection(title: "提出済", items: done, accent: .statusGreen)
                     }
                     .scrollContentBackground(.hidden)
                     .background(AppBackground())
@@ -127,9 +132,12 @@ private struct DeadlineRow: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                Text(submission.deadline.relativeDeadlineLabel)
-                    .font(.pillLabel)
-                    .foregroundStyle(submission.urgency.color)
+                // 提出済みは締切までの相対表示が意味を持たないので日付だけを出す
+                if submission.status != .submitted {
+                    Text(submission.deadline.relativeDeadlineLabel)
+                        .font(.pillLabel)
+                        .foregroundStyle(submission.urgency.color)
+                }
                 Text(submission.deadline.formattedDate)
                     .font(.caption2)
                     .foregroundStyle(.textSecondary)

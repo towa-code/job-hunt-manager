@@ -1,6 +1,6 @@
 name: JobHuntManager
 options:
-  bundleIdPrefix: com.towa.jobhuntmanager
+  bundleIdPrefix: com.towa.offerbound
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
@@ -21,10 +21,10 @@ targets:
       path: JobHuntManager/Info.plist
       properties:
         UILaunchScreen: {}
-        CFBundleDisplayName: 就活管理
+        CFBundleDisplayName: Offerbound
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.towa.jobhuntmanager
+        PRODUCT_BUNDLE_IDENTIFIER: com.towa.offerbound
         ASSETSCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
 
@@ -37,7 +37,7 @@ targets:
       - target: JobHuntManager
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.towa.jobhuntmanager.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.towa.offerbound.tests
         GENERATE_INFOPLIST_FILE: true
     scheme:
       testTargets:
