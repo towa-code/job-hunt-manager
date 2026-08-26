@@ -40,63 +40,68 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    HStack(spacing: 10) {
-                        SummaryCard(value: activeCompanyCount, label: "選考中", color: .signal)
-                        SummaryCard(value: weekEventCount, label: "今後7日", color: .statusBlue)
-                        SummaryCard(value: urgentSubmissionCount, label: "期限間近", color: .statusRed)
-                    }
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                }
+            VStack(spacing: 0) {
+                PageHeader(title: "ホーム")
 
-                Section {
-                    if upcomingItems.isEmpty {
-                        EmptyRowLabel(text: "予定はありません", icon: "calendar")
-                            .listRowBackground(Color.surfaceRaised)
-                    } else {
-                        ForEach(upcomingItems) { item in
-                            UpcomingItemRow(item: item)
-                                .listRowBackground(Color.surfaceRaised)
+                List {
+                    Section {
+                        HStack(spacing: 10) {
+                            SummaryCard(value: activeCompanyCount, label: "選考中", color: .signal)
+                            SummaryCard(value: weekEventCount, label: "今後7日", color: .statusBlue)
+                            SummaryCard(value: urgentSubmissionCount, label: "期限間近", color: .statusRed)
                         }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
-                } header: {
-                    Text("今後の予定")
-                        .font(.heading(13))
-                        .foregroundStyle(.textSecondary)
-                }
 
-                Section {
-                    if upcomingSubmissions.isEmpty {
-                        EmptyRowLabel(text: "未提出の提出物はありません", icon: "checkmark.circle")
-                            .listRowBackground(Color.surfaceRaised)
-                    } else {
-                        ForEach(upcomingSubmissions) { submission in
-                            if let company = submission.company {
-                                NavigationLink(value: company) {
-                                    UpcomingSubmissionRow(submission: submission)
-                                }
+                    Section {
+                        if upcomingItems.isEmpty {
+                            EmptyRowLabel(text: "予定はありません", icon: "calendar")
                                 .listRowBackground(Color.surfaceRaised)
-                            } else {
-                                UpcomingSubmissionRow(submission: submission)
+                        } else {
+                            ForEach(upcomingItems) { item in
+                                UpcomingItemRow(item: item)
                                     .listRowBackground(Color.surfaceRaised)
                             }
                         }
+                    } header: {
+                        Text("今後の予定")
+                            .font(.heading(13))
+                            .foregroundStyle(.textPrimary)
                     }
-                } header: {
-                    Text("締切が近い提出物")
-                        .font(.heading(13))
-                        .foregroundStyle(.textSecondary)
+
+                    Section {
+                        if upcomingSubmissions.isEmpty {
+                            EmptyRowLabel(text: "未提出の提出物はありません", icon: "checkmark.circle")
+                                .listRowBackground(Color.surfaceRaised)
+                        } else {
+                            ForEach(upcomingSubmissions) { submission in
+                                if let company = submission.company {
+                                    NavigationLink(value: company) {
+                                        UpcomingSubmissionRow(submission: submission)
+                                    }
+                                    .listRowBackground(Color.surfaceRaised)
+                                } else {
+                                    UpcomingSubmissionRow(submission: submission)
+                                        .listRowBackground(Color.surfaceRaised)
+                                }
+                            }
+                        }
+                    } header: {
+                        Text("締切が近い提出物")
+                            .font(.heading(13))
+                            .foregroundStyle(.textPrimary)
+                    }
                 }
+                .scrollContentBackground(.hidden)
+                .contentMargins(.top, 4, for: .scrollContent)
             }
-            .scrollContentBackground(.hidden)
             .background(AppBackground())
-            .navigationTitle("ホーム")
             .navigationDestination(for: Company.self) { company in
                 CompanyDetailView(company: company)
             }
+            .toolbar(.hidden, for: .navigationBar)
         }
         .tint(.signal)
     }

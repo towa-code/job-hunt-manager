@@ -52,23 +52,25 @@ final class InternshipTests: XCTestCase {
         XCTAssertEqual(company.kindRaw, .internship)
     }
 
-    // MARK: - ステータスの表示ラベル
+    // MARK: - 実施方法
 
-    func testStatusLabelIsRewrittenForInternship() {
-        XCTAssertEqual(SelectionStatus.applied.label(for: .internship), "応募")
-        XCTAssertEqual(SelectionStatus.offer.label(for: .internship), "参加確定")
+    func testInternFormatIsUnsetByDefault() {
+        let company = Company(name: "カエデ製薬")
+
+        XCTAssertNil(company.internFormat)
     }
 
-    func testStatusLabelIsUnchangedForFullTime() {
-        XCTAssertEqual(SelectionStatus.applied.label(for: .fullTime), SelectionStatus.applied.rawValue)
-        XCTAssertEqual(SelectionStatus.offer.label(for: .fullTime), SelectionStatus.offer.rawValue)
+    /// 保存済みデータが読めなくなるので rawValue は変えてはいけない
+    func testInternFormatRawValuesAreUnchanged() {
+        XCTAssertEqual(InternFormat.online.rawValue, "オンライン")
+        XCTAssertEqual(InternFormat.inPerson.rawValue, "対面")
+        XCTAssertEqual(InternFormat.hybrid.rawValue, "ハイブリッド")
     }
 
-    func testStatusLabelIsSharedWhenNotRewritten() {
-        XCTAssertEqual(
-            SelectionStatus.declined.label(for: .internship),
-            SelectionStatus.declined.label(for: .fullTime)
-        )
+    func testInternFormatLabelFollowsRawValue() {
+        for format in InternFormat.allCases {
+            XCTAssertEqual(format.label, format.rawValue)
+        }
     }
 
     // MARK: - タイムラインへのインターンの載り方

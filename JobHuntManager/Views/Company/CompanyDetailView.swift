@@ -22,8 +22,8 @@ struct CompanyDetailView: View {
     }
 
     /// URL文字列をスキーム付きのURLに正規化（スキームがなければ https を補う）
-    private var normalizedURL: URL? {
-        let trimmed = company.urlString.trimmingCharacters(in: .whitespacesAndNewlines)
+    private func normalizedURL(_ urlString: String) -> URL? {
+        let trimmed = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
         if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
             return URL(string: trimmed)
@@ -42,6 +42,54 @@ struct CompanyDetailView: View {
             message += "紐づく\(children.joined(separator: "・"))も削除されます。"
         }
         return message + "この操作は取り消せません。"
+    }
+
+    /// 応募者マイページ。URL・ログインIDのどちらも未入力なら丸ごと出さない
+    @ViewBuilder
+    private var mypageSection: some View {
+        if normalizedURL(company.mypageURLString) != nil || !company.loginID.isEmpty {
+            Section {
+                if let url = normalizedURL(company.mypageURLString) {
+                    Link(destination: url) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "person.crop.square")
+                                .font(.caption)
+                            Text(company.mypageURLString)
+                                .font(.mono)
+                                .lineLimit(1)
+                        }
+                        .foregroundStyle(.signal)
+                    }
+                    .listRowBackground(Color.surfaceRaised)
+                }
+
+                if !company.loginID.isEmpty {
+                    HStack(spacing: 8) {
+                        Text("ログインID")
+                            .font(.caption)
+                            .foregroundStyle(.textSecondary)
+                        Text(company.loginID)
+                            .font(.mono)
+                            .foregroundStyle(.textPrimary)
+                            .lineLimit(1)
+                        Spacer()
+                        Button {
+                            UIPasteboard.general.string = company.loginID
+                        } label: {
+                            Image(systemName: "doc.on.doc")
+                                .foregroundStyle(.signal)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("ログインIDをコピー")
+                    }
+                    .listRowBackground(Color.surfaceRaised)
+                }
+            } header: {
+                Text("マイページ")
+                    .font(.heading(13))
+                    .foregroundStyle(.textPrimary)
+            }
+        }
     }
 
     /// Listのbodyが型チェックの予算を超えるため、削除セクションは切り出す
@@ -83,14 +131,14 @@ struct CompanyDetailView: View {
                                     withAnimation { company.status = status }
                                 } label: {
                                     if status == company.status {
-                                        Label(status.label(for: company.kind), systemImage: "checkmark")
+                                        Label(status.label, systemImage: "checkmark")
                                     } else {
-                                        Text(status.label(for: company.kind))
+                                        Text(status.label)
                                     }
                                 }
                             }
                         } label: {
-                            StatusPillView(status: company.status, kind: company.kind)
+                            StatusPillView(status: company.status)
                         }
                     }
 
@@ -105,6 +153,17 @@ struct CompanyDetailView: View {
                         }
                     }
 
+                    if company.kind == .internship, let format = company.internFormat {
+                        HStack(spacing: 8) {
+                            Text("実施方法")
+                                .font(.caption)
+                                .foregroundStyle(.textSecondary)
+                            Text(format.label)
+                                .font(.caption)
+                                .foregroundStyle(Color.internBadge)
+                        }
+                    }
+
                     HStack(spacing: 8) {
                         Text("志望度")
                             .font(.caption)
@@ -112,7 +171,7 @@ struct CompanyDetailView: View {
                         PriorityDotsView(priority: company.priority)
                     }
 
-                    if let url = normalizedURL {
+                    if let url = normalizedURL(company.urlString) {
                         Link(destination: url) {
                             HStack(spacing: 6) {
                                 Image(systemName: "link")
@@ -139,6 +198,8 @@ struct CompanyDetailView: View {
                 .padding(.vertical, 6)
                 .listRowBackground(Color.surfaceRaised)
             }
+
+            mypageSection
 
             Section {
                 if sortedEvents.isEmpty {
@@ -167,7 +228,7 @@ struct CompanyDetailView: View {
             } header: {
                 Text("予定")
                     .font(.heading(13))
-                    .foregroundStyle(.textSecondary)
+                    .foregroundStyle(.textPrimary)
             }
 
             Section {
@@ -207,7 +268,7 @@ struct CompanyDetailView: View {
             } header: {
                 Text("提出物")
                     .font(.heading(13))
-                    .foregroundStyle(.textSecondary)
+                    .foregroundStyle(.textPrimary)
             }
 
             deleteSection

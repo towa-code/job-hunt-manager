@@ -65,6 +65,66 @@ struct AppBackground: View {
     }
 }
 
+/// 各タブ最上部の見出し行。右端に任意のアクションを置ける
+struct PageHeader<Trailing: View>: View {
+    let title: String
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.heading(22))
+                .foregroundStyle(.textPrimary)
+            Spacer()
+            trailing()
+        }
+        .padding(.leading, 32)
+        .padding(.trailing, 16)
+        .padding(.top, 6)
+        .padding(.bottom, 10)
+    }
+}
+
+extension PageHeader where Trailing == EmptyView {
+    init(title: String) {
+        self.init(title: title) { EmptyView() }
+    }
+}
+
+/// ヘッダー右の主アクション。シグナルカラーで塗る
+struct PrimaryCapsuleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.pillLabel)
+            .foregroundStyle(.white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(Color.signal, in: Capsule())
+            .opacity(configuration.isPressed ? 0.7 : 1)
+    }
+}
+
+/// ヘッダー右の副アクション。枠線だけの控えめなカプセル
+struct SecondaryCapsuleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .secondaryCapsule()
+            .opacity(configuration.isPressed ? 0.7 : 1)
+    }
+}
+
+extension View {
+    /// 副アクションのカプセル装飾。ButtonStyle を挟めない Menu のラベルにも使う
+    func secondaryCapsule() -> some View {
+        font(.pillLabel)
+            .foregroundStyle(Color.signal)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(Color.surfaceRaised, in: Capsule())
+            .overlay(Capsule().strokeBorder(Color.surfaceBorder, lineWidth: 1))
+    }
+}
+
 /// 選考ステータスを示すドット付きピル
 /// 選考区分のバッジ。本選考は既定なので、インターンのときだけ出す想定
 struct KindBadgeView: View {
@@ -82,15 +142,13 @@ struct KindBadgeView: View {
 
 struct StatusPillView: View {
     let status: SelectionStatus
-    /// 表示ラベルは選考区分で変わる（インターンなら 内定→参加確定 など）
-    var kind: SelectionKind = .fullTime
 
     var body: some View {
         HStack(spacing: 6) {
             Circle()
                 .fill(status.indicatorColor)
                 .frame(width: 6, height: 6)
-            Text(status.label(for: kind))
+            Text(status.label)
                 .font(.pillLabel)
                 .foregroundStyle(.textPrimary)
         }

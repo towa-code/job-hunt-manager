@@ -30,44 +30,46 @@ struct CalendarView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    VStack(spacing: 12) {
-                        monthHeader
-                        weekdayHeader
-                        monthGrid
-                    }
-                    .cardStyle()
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                }
-
-                Section {
-                    selectedDaySection
-                } header: {
-                    Text(selectedDay?.formattedDate ?? "日付を選択")
-                        .font(.heading(13))
-                        .foregroundStyle(.textSecondary)
-                }
-            }
-            .scrollContentBackground(.hidden)
-            .background(AppBackground())
-            .navigationTitle("カレンダー")
-            .navigationDestination(for: Company.self) { company in
-                CompanyDetailView(company: company)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+            VStack(spacing: 0) {
+                PageHeader(title: "カレンダー") {
                     Button("今日") {
                         withAnimation {
                             grid = MonthGrid(containing: Date())
                             selectedDay = calendar.startOfDay(for: Date())
                         }
                     }
-                    .font(.pillLabel)
+                    .buttonStyle(SecondaryCapsuleButtonStyle())
                 }
+
+                List {
+                    Section {
+                        VStack(spacing: 12) {
+                            monthHeader
+                            weekdayHeader
+                            monthGrid
+                        }
+                        .cardStyle()
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                    }
+
+                    Section {
+                        selectedDaySection
+                    } header: {
+                        Text(selectedDay?.formattedDate ?? "日付を選択")
+                            .font(.heading(13))
+                            .foregroundStyle(.textPrimary)
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                .contentMargins(.top, 4, for: .scrollContent)
             }
+            .background(AppBackground())
+            .navigationDestination(for: Company.self) { company in
+                CompanyDetailView(company: company)
+            }
+            .toolbar(.hidden, for: .navigationBar)
         }
         .tint(.signal)
     }
