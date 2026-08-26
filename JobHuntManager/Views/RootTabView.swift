@@ -22,6 +22,11 @@ struct RootTabView: View {
                 .tabItem {
                     Label("カレンダー", systemImage: "calendar")
                 }
+
+            ProfileView()
+                .tabItem {
+                    Label("あなた", systemImage: "person.crop.circle")
+                }
         }
         .tint(.signal)
         .toolbarBackground(Color.surface, for: .tabBar)
@@ -32,5 +37,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView()
-        .modelContainer(for: [Company.self, JobEvent.self, Submission.self], inMemory: true)
+        .modelContainer(for: [Company.self, JobEvent.self, Submission.self, Profile.self], inMemory: true)
 }

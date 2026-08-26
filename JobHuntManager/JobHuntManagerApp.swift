@@ -8,6 +8,7 @@ struct JobHuntManagerApp: App {
             Company.self,
             JobEvent.self,
             Submission.self,
+            Profile.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -72,6 +73,32 @@ struct JobHuntManagerApp: App {
         context.insert(Submission(title: "二次面接前アンケート", type: .other, deadline: days(1), status: .notStarted, company: sakura))
         context.insert(Submission(title: "履歴書", type: .resume, deadline: days(6), status: .notStarted, company: aoba))
         context.insert(Submission(title: "インターンES", type: .entrySheet, deadline: days(-7), status: .submitted, company: kaede))
+
+        let profile = Profile()
+        profile.familyName = "鈴木"
+        profile.givenName = "太郎"
+        profile.familyNameKana = "スズキ"
+        profile.givenNameKana = "タロウ"
+        profile.birthday = calendar.date(from: DateComponents(year: 2003, month: 4, day: 1))
+        profile.postalCode = "100-0005"
+        profile.address1 = "東京都千代田区丸の内"
+        profile.address2 = "1-1-1 サンプルマンション101"
+        profile.phone = "090-1234-5678"
+        profile.email = "taro.suzuki@example.com"
+        profile.university = "△△大学"
+        profile.faculty = "工学部"
+        profile.department = "情報工学科"
+        profile.studentID = "S2100123"
+        profile.graduationOn = calendar.date(from: DateComponents(year: 2027, month: 3, day: 1))
+        profile.certifications = [
+            Certification(name: "TOEIC 850点", acquiredOn: calendar.date(from: DateComponents(year: 2025, month: 6, day: 1))),
+            Certification(name: "基本情報技術者", acquiredOn: calendar.date(from: DateComponents(year: 2024, month: 11, day: 1))),
+        ]
+        profile.links = [
+            ProfileLink(label: "GitHub", urlString: "https://github.com/example"),
+            ProfileLink(label: "ポートフォリオ", urlString: "https://example.com"),
+        ]
+        context.insert(profile)
     }
     #endif
 
