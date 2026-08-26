@@ -11,6 +11,16 @@ extension Date {
         Self.dateTimeFormatter.string(from: self)
     }
 
+    /// 例: "2026年8月"
+    var formattedYearMonth: String {
+        Self.yearMonthFormatter.string(from: self)
+    }
+
+    /// 例: "14:30"
+    var formattedTime: String {
+        Self.timeFormatter.string(from: self)
+    }
+
     /// 例: "06/15 (月) 14:30"
     var formattedShortDateTime: String {
         Self.shortDateTimeFormatter.string(from: self)
@@ -18,13 +28,30 @@ extension Date {
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
+        // 固定フォーマットには POSIX ロケールを指定する（端末が和暦設定でも西暦で出力するため）
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
 
     private static let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        return formatter
+    }()
+
+    private static let yearMonthFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy年M月"
+        return formatter
+    }()
+
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "HH:mm"
         return formatter
     }()
 

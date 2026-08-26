@@ -1,12 +1,12 @@
-# 就活管理（JobHuntManager）
+# Offerbound（就活管理）
 
 就活に関わる情報を一元管理する iOS アプリです。企業ごとに選考状況・面接などの予定・ES などの提出書類をまとめて管理し、直近の予定と締切をひと目で把握できます。
 
 ## スクリーンショット概要
 
-- **ホーム**: 選考中の企業数・今週の予定数・期限間近の提出物数のサマリーカードと、直近の予定／締切一覧
+- **ホーム**: 選考中の企業数・今後7日の予定数・期限間近の提出物数のサマリーカードと、直近の予定／締切一覧
 - **企業**: 検索バーとステータスチップで絞り込める企業一覧 → 詳細画面で予定・提出物を管理
-- **締切**: 全企業横断の提出物を「期限超過 / 3日以内 / それ以降」に自動分類
+- **締切**: 全企業横断の提出物を「期限超過 / 3日以内 / それ以降 / 提出済」に自動分類
 
 ## 主な機能
 
@@ -97,7 +97,7 @@ xcodebuild -project JobHuntManager.xcodeproj -scheme JobHuntManager \
 デバッグビルドで起動引数 `-seedSampleData` を付けると、ストアが空の場合のみサンプルデータ（企業4社・予定・提出物）が投入されます。
 
 ```sh
-xcrun simctl launch <device> com.towa.jobhuntmanager -seedSampleData
+xcrun simctl launch <device> com.towa.offerbound -seedSampleData
 ```
 
 ## デザイン
@@ -110,8 +110,9 @@ xcrun simctl launch <device> com.towa.jobhuntmanager -seedSampleData
 
 カラーパレットや共通コンポーネント（`StatusPillView` / `PriorityDotsView` / `cardStyle()` など）は `Support/Theme.swift` に集約しています。
 
-## スコープ外（今後の候補）
+## 今後の改善・追加機能案
 
-- リマインダー通知（UNUserNotification）
-- iCloud / CloudKit 同期
-- カレンダーアプリ連携・添付ファイル
+改善バックログと設計メモは [`docs/`](docs/) にまとめています。
+
+- [docs/backlog.md](docs/backlog.md) — 改善バックログ（既知の課題・追加機能案）
+- [docs/cloudkit.md](docs/cloudkit.md) — iPhone / iPad 同期に向けた CloudKit 導入の検討

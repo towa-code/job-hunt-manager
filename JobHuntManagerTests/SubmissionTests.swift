@@ -34,6 +34,14 @@ final class SubmissionTests: XCTestCase {
         XCTAssertEqual(submission.urgency, .soon)
     }
 
+    /// 3日以内が soon、ちょうど3日後は normal という境界
+    func testUrgencyBoundaryAtThreeDays() {
+        let twoDaysLater = calendar.date(byAdding: .day, value: 2, to: Date())!
+        let threeDaysLater = calendar.date(byAdding: .day, value: 3, to: Date())!
+        XCTAssertEqual(Submission(title: "ES", deadline: twoDaysLater).urgency, .soon)
+        XCTAssertEqual(Submission(title: "ES", deadline: threeDaysLater).urgency, .normal)
+    }
+
     func testUrgencyIsNormalWhenFarInFuture() {
         let nextWeek = calendar.date(byAdding: .day, value: 10, to: Date())!
         let submission = Submission(
@@ -42,16 +50,5 @@ final class SubmissionTests: XCTestCase {
             status: .notStarted
         )
         XCTAssertEqual(submission.urgency, .normal)
-    }
-}
-
-extension SubmissionUrgency: Equatable {
-    public static func == (lhs: SubmissionUrgency, rhs: SubmissionUrgency) -> Bool {
-        switch (lhs, rhs) {
-        case (.done, .done), (.overdue, .overdue), (.soon, .soon), (.normal, .normal):
-            return true
-        default:
-            return false
-        }
     }
 }

@@ -82,7 +82,6 @@ struct EventEditView: View {
                 company: company
             )
             modelContext.insert(newEvent)
-            company.events.append(newEvent)
         }
         dismiss()
     }
