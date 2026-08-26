@@ -1,13 +1,13 @@
 import Foundation
 
-/// ある月を 6週×7日 = 42マスで表すグリッド（SwiftData に依存しない）
+/// ある月を 週×7日 のマスで表すグリッド（SwiftData に依存しない）
 ///
-/// 週数にかかわらずマス数を固定するのは、月を送ってもグリッドの高さと
-/// その下のセクションの位置が跳ねないようにするため。
+/// 週数は月によって 4〜6 で変わる。**表示月の日が1つも入らない週は作らない**
+/// （2026年9月は最終週が10/4〜10/10 で丸ごと翌月になるため、5週で打ち切る）。
 struct MonthGrid {
     /// 表示月の1日 0:00
     let firstOfMonth: Date
-    /// 常に42要素。各要素は 0:00 に正規化済み
+    /// 週数 × 7 要素。各要素は 0:00 に正規化済み
     let days: [Date]
     /// 曜日ヘッダ。firstWeekday の並び
     let weekdaySymbols: [String]
@@ -28,7 +28,11 @@ struct MonthGrid {
         let leadingDays = (weekdayOfMonthStart - calendar.firstWeekday + 7) % 7
         let gridStart = calendar.date(byAdding: .day, value: -leadingDays, to: monthStart) ?? monthStart
 
-        days = (0..<42).map { offset in
+        // 表示月の日を収めるのに必要な週数だけ作る
+        let daysInMonth = calendar.range(of: .day, in: .month, for: monthStart)?.count ?? 31
+        let weekCount = (leadingDays + daysInMonth + 6) / 7
+
+        days = (0..<(weekCount * 7)).map { offset in
             let day = calendar.date(byAdding: .day, value: offset, to: gridStart) ?? gridStart
             return calendar.startOfDay(for: day)
         }

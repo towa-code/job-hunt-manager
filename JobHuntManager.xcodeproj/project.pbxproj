@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0D165439663F09B9CE2F31CF /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3BA44B58E2B5B4FFC56947 /* RootTabView.swift */; };
 		0D89C433C6F3491152A8456B /* RelationshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277377F458276B770D74C4E5 /* RelationshipTests.swift */; };
+		130209489E84B1A037660EC4 /* InternSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = E904C351AE655B35C454D616 /* InternSchedule.swift */; };
+		25CF81D0A756F6D6D747DDA6 /* InternScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8030EF4CF487F453966EC6F0 /* InternScheduleTests.swift */; };
 		384AD8A367762D8291F3CDDA /* SubmissionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29589734F45E42902DDADD9 /* SubmissionEditView.swift */; };
 		554907BD583EC098622BAFA5 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109CC097D4091AE77F563F98 /* Company.swift */; };
 		580022A72C76452871DF2A87 /* UpcomingTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1C0EEF5A08037B7703E63D /* UpcomingTimeline.swift */; };
@@ -65,6 +67,7 @@
 		6AEAEF7215AEE892EB12222E /* SubmissionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionTests.swift; sourceTree = "<group>"; };
 		6EE506A2B3E0FC6C1D0A5BDD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7C7D54C0C85704E025F2D8DC /* JobHuntManager.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = JobHuntManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8030EF4CF487F453966EC6F0 /* InternScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternScheduleTests.swift; sourceTree = "<group>"; };
 		81DC3DF1ED0BCECB4FD2E1FA /* DayMarkersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMarkersTests.swift; sourceTree = "<group>"; };
 		8F3BA44B58E2B5B4FFC56947 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		93708CAEBC21F29666451C70 /* CompanyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyDetailView.swift; sourceTree = "<group>"; };
@@ -73,6 +76,7 @@
 		AF1C0EEF5A08037B7703E63D /* UpcomingTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingTimeline.swift; sourceTree = "<group>"; };
 		B82DC1803FC4718ABB372BC2 /* JobHuntManagerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = JobHuntManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD732EB95B4494853D148768 /* DeadlineListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadlineListView.swift; sourceTree = "<group>"; };
+		E904C351AE655B35C454D616 /* InternSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternSchedule.swift; sourceTree = "<group>"; };
 		FD1A99E7A6A1FFF2EA548890 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FDD309A252BA68EE96FA8D62 /* DateFormatter+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,6 +149,7 @@
 				4B7E03CB426716CD110683DE /* CompanyMypageTests.swift */,
 				39B886F96DF0F15ED969A624 /* DateFormattingTests.swift */,
 				81DC3DF1ED0BCECB4FD2E1FA /* DayMarkersTests.swift */,
+				8030EF4CF487F453966EC6F0 /* InternScheduleTests.swift */,
 				14F894F22DB0705C504F0F6E /* InternshipTests.swift */,
 				1375B3A6551F6684BBCF1A68 /* MonthGridTests.swift */,
 				277377F458276B770D74C4E5 /* RelationshipTests.swift */,
@@ -184,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				FDD309A252BA68EE96FA8D62 /* DateFormatter+Ext.swift */,
+				E904C351AE655B35C454D616 /* InternSchedule.swift */,
 				3B0812E51B13B7E1275660D2 /* MonthGrid.swift */,
 				02373D6A87802E8328B90B5C /* Theme.swift */,
 				AF1C0EEF5A08037B7703E63D /* UpcomingTimeline.swift */,
@@ -312,6 +318,7 @@
 				BC8B448980EFC996C8564E5A /* DeadlineListView.swift in Sources */,
 				A5F0D18E45EBC3215B16A8B1 /* EventEditView.swift in Sources */,
 				65D77842C3C680DBA385C852 /* HomeView.swift in Sources */,
+				130209489E84B1A037660EC4 /* InternSchedule.swift in Sources */,
 				D236DAA5E9664319999E2FF1 /* JobEvent.swift in Sources */,
 				EAB609166B7EADE1509E4C10 /* JobHuntManagerApp.swift in Sources */,
 				EC339C41535C04EE52C1F8AC /* MonthGrid.swift in Sources */,
@@ -330,6 +337,7 @@
 				7F4E01B2C003F4C1842974D7 /* CompanyMypageTests.swift in Sources */,
 				B0FECCB62CB55D8257205A55 /* DateFormattingTests.swift in Sources */,
 				A3E2CA8FBF9E8553E24E4464 /* DayMarkersTests.swift in Sources */,
+				25CF81D0A756F6D6D747DDA6 /* InternScheduleTests.swift in Sources */,
 				E9F79577128E5E0DDCB24519 /* InternshipTests.swift in Sources */,
 				EFD59DBF900C1BE3BA44EF6F /* MonthGridTests.swift in Sources */,
 				0D89C433C6F3491152A8456B /* RelationshipTests.swift in Sources */,

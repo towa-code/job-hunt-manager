@@ -45,6 +45,9 @@ extension Font {
     /// ラベル・ピル用
     static let pillLabel = Font.system(.caption, design: .rounded).weight(.semibold)
 
+    /// カレンダーの帯など、ピルより一段小さいラベル用
+    static let barLabel = Font.system(.caption2, design: .rounded).weight(.semibold)
+
     /// 日付・数値用の等幅フォント
     static let mono = Font.system(.callout, design: .monospaced)
 }
