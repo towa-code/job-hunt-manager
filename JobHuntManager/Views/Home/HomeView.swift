@@ -6,11 +6,9 @@ struct HomeView: View {
     @Query private var events: [JobEvent]
     @Query private var submissions: [Submission]
 
-    private var upcomingEvents: [JobEvent] {
-        let now = Date()
-        return events
-            .filter { $0.date >= now }
-            .sorted { $0.date < $1.date }
+    /// 予定とインターンの実施期間を1本の時系列にまとめたもの
+    private var upcomingItems: [UpcomingItem] {
+        UpcomingTimeline.items(events: events, companies: companies, now: Date())
             .prefix(5)
             .map { $0 }
     }
@@ -28,11 +26,9 @@ struct HomeView: View {
         companies.filter { $0.status != .offer && $0.status != .declined }.count
     }
 
-    /// 今後7日以内の予定数
-    private var thisWeekEventCount: Int {
-        let now = Date()
-        guard let weekLater = Calendar.current.date(byAdding: .day, value: 7, to: now) else { return 0 }
-        return events.filter { $0.date >= now && $0.date <= weekLater }.count
+    /// 今日から7日以内の予定数（インターンの実施開始を含む）
+    private var weekEventCount: Int {
+        UpcomingTimeline.weekCount(events: events, companies: companies, now: Date())
     }
 
     /// 期限切れ＋3日以内の未提出物数
@@ -48,7 +44,7 @@ struct HomeView: View {
                 Section {
                     HStack(spacing: 10) {
                         SummaryCard(value: activeCompanyCount, label: "選考中", color: .signal)
-                        SummaryCard(value: thisWeekEventCount, label: "今週の予定", color: .statusBlue)
+                        SummaryCard(value: weekEventCount, label: "今後7日", color: .statusBlue)
                         SummaryCard(value: urgentSubmissionCount, label: "期限間近", color: .statusRed)
                     }
                     .listRowBackground(Color.clear)
@@ -57,20 +53,13 @@ struct HomeView: View {
                 }
 
                 Section {
-                    if upcomingEvents.isEmpty {
+                    if upcomingItems.isEmpty {
                         EmptyRowLabel(text: "予定はありません", icon: "calendar")
                             .listRowBackground(Color.surfaceRaised)
                     } else {
-                        ForEach(upcomingEvents) { event in
-                            if let company = event.company {
-                                NavigationLink(value: company) {
-                                    UpcomingEventRow(event: event)
-                                }
+                        ForEach(upcomingItems) { item in
+                            UpcomingItemRow(item: item)
                                 .listRowBackground(Color.surfaceRaised)
-                            } else {
-                                UpcomingEventRow(event: event)
-                                    .listRowBackground(Color.surfaceRaised)
-                            }
                         }
                     }
                 } header: {
@@ -153,6 +142,57 @@ private struct EmptyRowLabel: View {
                 .foregroundStyle(.textSecondary)
         }
         .font(.subheadline)
+    }
+}
+
+/// 予定とインターンで行の中身と遷移先を出し分ける
+private struct UpcomingItemRow: View {
+    let item: UpcomingItem
+
+    var body: some View {
+        switch item.content {
+        case .event(let event):
+            if let company = event.company {
+                NavigationLink(value: company) {
+                    UpcomingEventRow(event: event)
+                }
+            } else {
+                UpcomingEventRow(event: event)
+            }
+        case .internship(let company):
+            NavigationLink(value: company) {
+                UpcomingInternshipRow(company: company, isInProgress: item.isInProgress)
+            }
+        }
+    }
+}
+
+/// インターンの実施期間の行
+private struct UpcomingInternshipRow: View {
+    let company: Company
+    let isInProgress: Bool
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(company.name)
+                    .foregroundStyle(.textPrimary)
+                Text(SelectionKind.internship.label)
+                    .font(.caption)
+                    .foregroundStyle(.textSecondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(isInProgress ? "実施中" : (company.internPeriodLabel ?? ""))
+                    .font(.pillLabel)
+                    .foregroundStyle(Color.internBadge)
+                if isInProgress, let period = company.internPeriodLabel {
+                    Text(period)
+                        .font(.caption2)
+                        .foregroundStyle(.textSecondary)
+                }
+            }
+        }
     }
 }
 

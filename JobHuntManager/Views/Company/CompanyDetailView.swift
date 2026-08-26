@@ -67,6 +67,9 @@ struct CompanyDetailView: View {
                             Text(company.name)
                                 .font(.heading(22))
                                 .foregroundStyle(.textPrimary)
+                            if company.kind == .internship {
+                                KindBadgeView(kind: company.kind)
+                            }
                             if !company.industry.isEmpty {
                                 Text(company.industry)
                                     .font(.caption)
@@ -80,14 +83,25 @@ struct CompanyDetailView: View {
                                     withAnimation { company.status = status }
                                 } label: {
                                     if status == company.status {
-                                        Label(status.label, systemImage: "checkmark")
+                                        Label(status.label(for: company.kind), systemImage: "checkmark")
                                     } else {
-                                        Text(status.label)
+                                        Text(status.label(for: company.kind))
                                     }
                                 }
                             }
                         } label: {
-                            StatusPillView(status: company.status)
+                            StatusPillView(status: company.status, kind: company.kind)
+                        }
+                    }
+
+                    if let period = company.internPeriodLabel {
+                        HStack(spacing: 8) {
+                            Text("実施期間")
+                                .font(.caption)
+                                .foregroundStyle(.textSecondary)
+                            Text(period)
+                                .font(.mono)
+                                .foregroundStyle(Color.internBadge)
                         }
                     }
 

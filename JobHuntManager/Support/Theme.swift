@@ -22,6 +22,9 @@ extension Color {
     static let statusGreen = Color(red: 0.086, green: 0.639, blue: 0.290)
     static let statusRed = Color(red: 0.882, green: 0.114, blue: 0.282)
     static let statusGray = Color(red: 0.420, green: 0.447, blue: 0.502)
+
+    /// 選考区分「インターン」のバッジ
+    static let internBadge = Color(red: 0.129, green: 0.494, blue: 0.635)
 }
 
 // `.foregroundStyle(.textPrimary)` のように暗黙メンバとして使えるようにする
@@ -63,15 +66,31 @@ struct AppBackground: View {
 }
 
 /// 選考ステータスを示すドット付きピル
+/// 選考区分のバッジ。本選考は既定なので、インターンのときだけ出す想定
+struct KindBadgeView: View {
+    let kind: SelectionKind
+
+    var body: some View {
+        Text(kind.label)
+            .font(.pillLabel)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(Color.internBadge.opacity(0.14), in: Capsule())
+            .foregroundStyle(Color.internBadge)
+    }
+}
+
 struct StatusPillView: View {
     let status: SelectionStatus
+    /// 表示ラベルは選考区分で変わる（インターンなら 内定→参加確定 など）
+    var kind: SelectionKind = .fullTime
 
     var body: some View {
         HStack(spacing: 6) {
             Circle()
                 .fill(status.indicatorColor)
                 .frame(width: 6, height: 6)
-            Text(status.label)
+            Text(status.label(for: kind))
                 .font(.pillLabel)
                 .foregroundStyle(.textPrimary)
         }

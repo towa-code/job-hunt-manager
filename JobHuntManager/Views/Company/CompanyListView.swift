@@ -146,19 +146,29 @@ private struct CompanyRow: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(company.name)
-                    .font(.heading(17))
-                    .foregroundStyle(.textPrimary)
+                HStack(spacing: 6) {
+                    Text(company.name)
+                        .font(.heading(17))
+                        .foregroundStyle(.textPrimary)
+                    if company.kind == .internship {
+                        KindBadgeView(kind: company.kind)
+                    }
+                }
                 if !company.industry.isEmpty {
                     Text(company.industry)
                         .font(.caption)
                         .foregroundStyle(.textSecondary)
                 }
+                if let period = company.internPeriodLabel {
+                    Text(period)
+                        .font(.caption)
+                        .foregroundStyle(Color.internBadge)
+                }
                 PriorityDotsView(priority: company.priority)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 6) {
-                StatusPillView(status: company.status)
+                StatusPillView(status: company.status, kind: company.kind)
                 if let nextEvent = company.events.filter({ $0.date >= Date() }).min(by: { $0.date < $1.date }) {
                     Text("次: \(nextEvent.date.formattedShortDateTime)")
                         .font(.caption2)

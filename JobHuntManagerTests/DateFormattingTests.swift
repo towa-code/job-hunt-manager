@@ -21,6 +21,12 @@ final class DateFormattingTests: XCTestCase {
         )
     }
 
+    /// インターン実施期間の短縮表記。和暦設定に引きずられないこと
+    func testFormattedMonthDay() {
+        XCTAssertEqual(makeDate(year: 2026, month: 8, day: 1).formattedMonthDay, "8/1")
+        XCTAssertEqual(makeDate(year: 2026, month: 12, day: 25).formattedMonthDay, "12/25")
+    }
+
     /// カレンダーのヘッダ表記。和暦設定でも西暦で出ること
     func testFormattedYearMonth() {
         XCTAssertEqual(makeDate(year: 2026, month: 8, day: 1).formattedYearMonth, "2026年8月")

@@ -23,6 +23,15 @@ enum SelectionStatus: String, Codable, CaseIterable, Identifiable {
         }
     }
 
+    /// 選考区分ごとの表示ラベル。区分で差し替えないものは通常の `label` に従う
+    func label(for kind: SelectionKind) -> String {
+        switch (self, kind) {
+        case (.applied, .internship): return "応募"
+        case (.offer, .internship): return "参加確定"
+        default: return label
+        }
+    }
+
     /// 一覧などでの並び順
     var sortOrder: Int {
         switch self {
@@ -50,6 +59,15 @@ enum SelectionStatus: String, Codable, CaseIterable, Identifiable {
     }
 }
 
+/// 選考区分
+enum SelectionKind: String, Codable, CaseIterable, Identifiable {
+    case fullTime = "本選考"
+    case internship = "インターン"
+
+    var id: String { rawValue }
+    var label: String { rawValue }
+}
+
 /// 企業
 @Model
 final class Company {
@@ -62,6 +80,27 @@ final class Company {
     var urlString: String = ""
     var memo: String = ""
     var createdAt: Date = Date()
+    /// 選考区分の保存用。移行済みの既存行は NULL で読まれるため Optional にする。
+    /// 直接触るのは `kind` のアクセサだけ。
+    var kindRaw: SelectionKind?
+    var internStartDate: Date?
+    var internEndDate: Date?
+
+    /// 未設定（移行済みの既存行）は本選考として扱う
+    var kind: SelectionKind {
+        get { kindRaw ?? .fullTime }
+        set { kindRaw = newValue }
+    }
+
+    /// インターンの実施期間の短縮表記。本選考や未設定なら nil
+    var internPeriodLabel: String? {
+        guard kind == .internship, let start = internStartDate else { return nil }
+        guard let end = internEndDate,
+              !Calendar.current.isDate(end, inSameDayAs: start) else {
+            return start.formattedMonthDay
+        }
+        return "\(start.formattedMonthDay)〜\(end.formattedMonthDay)"
+    }
 
     @Relationship(deleteRule: .cascade, inverse: \JobEvent.company)
     var events: [JobEvent] = []

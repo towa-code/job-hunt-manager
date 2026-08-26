@@ -12,6 +12,9 @@ struct CompanyEditView: View {
     @State private var name: String = ""
     @State private var industry: String = ""
     @State private var status: SelectionStatus = .interested
+    @State private var kind: SelectionKind = .fullTime
+    @State private var internStartDate = Date()
+    @State private var internEndDate = Date()
     @State private var priority: Int = 0
     @State private var urlString: String = ""
     @State private var memo: String = ""
@@ -29,10 +32,29 @@ struct CompanyEditView: View {
                         .textInputAutocapitalization(.never)
                 }
 
+                Section("選考区分") {
+                    Picker("区分", selection: $kind) {
+                        ForEach(SelectionKind.allCases) { kind in
+                            Text(kind.label).tag(kind)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    if kind == .internship {
+                        DatePicker("開始日", selection: $internStartDate, displayedComponents: .date)
+                        DatePicker(
+                            "終了日",
+                            selection: $internEndDate,
+                            in: internStartDate...,
+                            displayedComponents: .date
+                        )
+                    }
+                }
+
                 Section("選考状況") {
                     Picker("ステータス", selection: $status) {
                         ForEach(SelectionStatus.allCases.sorted { $0.sortOrder < $1.sortOrder }) { status in
-                            Text(status.label).tag(status)
+                            Text(status.label(for: kind)).tag(status)
                         }
                     }
 
@@ -84,6 +106,10 @@ struct CompanyEditView: View {
         name = company.name
         industry = company.industry
         status = company.status
+        kind = company.kind
+        // 未設定なら今日を初期値にする（DatePicker は nil を扱えないため）
+        internStartDate = company.internStartDate ?? Date()
+        internEndDate = company.internEndDate ?? company.internStartDate ?? Date()
         priority = company.priority
         urlString = company.urlString
         memo = company.memo
@@ -97,6 +123,7 @@ struct CompanyEditView: View {
             company.priority = priority
             company.urlString = urlString
             company.memo = memo
+            applyKind(to: company)
         } else {
             let newCompany = Company(
                 name: name,
@@ -106,9 +133,22 @@ struct CompanyEditView: View {
                 urlString: urlString,
                 memo: memo
             )
+            applyKind(to: newCompany)
             modelContext.insert(newCompany)
         }
         dismiss()
+    }
+
+    /// 本選考に戻したときは実施期間を落とす（インターンでない企業に期間が残らないように）
+    private func applyKind(to company: Company) {
+        company.kind = kind
+        if kind == .internship {
+            company.internStartDate = internStartDate
+            company.internEndDate = internEndDate
+        } else {
+            company.internStartDate = nil
+            company.internEndDate = nil
+        }
     }
 }
 
