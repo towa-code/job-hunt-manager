@@ -53,6 +53,39 @@
 
 ---
 
+## P0: App Store 提出に必要なもの（2026-08-26 洗い出し）
+
+配布前に必ず片付ける項目。上の「モデル変更の扱い」で保留にしたマイグレーションが、ここで期限を迎える。
+
+### 技術ブロッカー
+
+- [ ] **マイグレーション V1 を打つ** — 配布後は「削除して再インストール」で復旧させられない。`JobHuntManagerApp.swift` の `fatalError` も、既存ユーザーの端末では起動不能を意味するのでエラー画面に置き換える。**モデルを触る機能（選考履歴・志望度の enum 化・プロフィール）を先に片付けてから一度だけ打つ**
+- [ ] **AppIcon の画像が空** — `AppIcon.appiconset/Contents.json` に 1024×1024 の参照がなく、無いとアップロード自体が弾かれる。合わせて `project.yml` の `ASSETSCATALOG_COMPILER_APPICON_NAME` のタイポ（正: `ASSETCATALOG_`）を直さないと、画像を入れても紐づかない
+- [ ] **`DEVELOPMENT_TEAM` が空** — Apple Developer Program 加入、Bundle ID `com.towa.offerbound` の登録、Free Apps 契約の締結が前提
+- [ ] **`ITSAppUsesNonExemptEncryption` を `false` で Info.plist に追加** — 無いとアップロードのたびに暗号化の質問に手で答えることになる
+- [ ] **iPad を v1 に含めるか決める** — `TARGETED_DEVICE_FAMILY: "1,2"` のままだと iPad のスクリーンショットが必須になり、iPad 最適化（P2 の `NavigationSplitView`）も審査対象になる。`"1"` に絞って後から広げるのが安全
+
+### App Store Connect 側の提出物
+
+- [ ] **プライバシーポリシーの公開 URL** — 全アプリ必須。収集ゼロでも「何も集めていない」と書いたページが要る（GitHub Pages で十分）
+- [ ] **App Privacy（データ収集の申告）** — 「データを収集していません」で申告
+- [ ] **サポート URL** — 必須。リポジトリの URL でも可
+- [ ] **スクリーンショット** — iPhone 最大サイズ1セット。iPad 対応なら 13 インチも
+- [ ] **説明文・キーワード・カテゴリ・年齢レーティング質問票**
+
+> **利用規約（EULA）は不要。** Apple 標準の EULA が自動適用される。独自の規約が要るのは UGC の共有機能・アカウント登録・サブスク課金がある場合で、いずれも該当しない。
+> **`PrivacyInfo.xcprivacy` も現状は不要。** `UserDefaults`・ファイルタイムスタンプ API・第三者 SDK のいずれも使っていない。通知やエクスポートを足したら再確認する。
+
+### 審査で落ちうる点（Guideline 4.2「最低限の機能」）
+
+ローカルのリスト管理アプリは「Web で足りる」と判断されうる。効くのは既に下にある項目:
+
+- [ ] **空状態とオンボーディング** — 審査員は空のアプリを開く。今は追加導線が企業タブの ＋ だけ
+- [ ] **リマインダー通知** — 「締切管理アプリなのに通知がない」を埋める
+- [ ] **データのエクスポート** — CloudKit 無しでは端末紛失で全損する
+
+---
+
 ## P1: 土台の整備（機能追加の前提になるもの）
 
 - [ ] **スキーマのマイグレーション設計**（⏸ 保留中 — 上の「モデル変更の扱い」参照）— `JobHuntManagerApp.swift` は `ModelContainer` 生成失敗時に `fatalError`。`VersionedSchema` / `SchemaMigrationPlan` を入れておかないと、モデルを1つ変えた瞬間に既存インストールが起動不能になる
