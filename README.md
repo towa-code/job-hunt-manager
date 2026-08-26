@@ -26,6 +26,13 @@
 - 締切は「今日」「明日」「あと◯日」「◯日超過」の相対表示
 - **左スワイプで即「提出済」にできるクイック操作**
 
+### プロフィール
+- 氏名・フリガナ（姓/名を分けて保持）・生年月日・連絡先・学歴・資格・URL を登録
+- **各行をタップするとクリップボードにコピー**。ES や応募フォームへの転記に使う
+- 生年月日は西暦・和暦・年齢の3行に展開し、それぞれ単体でコピー可能
+- 氏名と住所は結合形（「鈴木 太郎」「東京都〜1-1-1」）も別行で用意し、入力欄が1つのフォームにも対応
+- 未入力の項目は行ごと表示しない
+
 ### データ
 - SwiftData による端末内保存（サーバー・アカウント不要）
 - 企業を削除すると紐づく予定・提出物もまとめて削除（カスケード）
@@ -48,17 +55,19 @@ JobHuntManager/
 ├── Models/
 │   ├── Company.swift              # 企業 + 選考ステータス
 │   ├── JobEvent.swift             # 予定 + 種別
-│   └── Submission.swift           # 提出物 + 種別・ステータス・緊急度
+│   ├── Submission.swift           # 提出物 + 種別・ステータス・緊急度
+│   └── Profile.swift              # プロフィール + 資格・URL
 ├── Views/
 │   ├── RootTabView.swift          # 3タブのルート
 │   ├── Home/                      # ホーム（サマリー + 直近の予定・締切）
 │   ├── Company/                   # 企業一覧・詳細・編集フォーム
 │   ├── Event/                     # 予定の編集フォーム
 │   ├── Submission/                # 提出物の編集フォーム
-│   └── Deadline/                  # 締切一覧
+│   ├── Deadline/                  # 締切一覧
+│   └── Profile/                   # プロフィール（表示・編集フォーム）
 └── Support/
     ├── Theme.swift                # デザインシステム（色・フォント・共通コンポーネント）
-    └── DateFormatter+Ext.swift    # 日付フォーマット・相対締切表示
+    └── DateFormatter+Ext.swift    # 日付フォーマット・相対締切表示・和暦・満年齢
 ```
 
 ## ビルド方法
@@ -94,7 +103,7 @@ xcodebuild -project JobHuntManager.xcodeproj -scheme JobHuntManager \
 
 ### デモデータ
 
-デバッグビルドで起動引数 `-seedSampleData` を付けると、ストアが空の場合のみサンプルデータ（企業4社・予定・提出物）が投入されます。
+デバッグビルドで起動引数 `-seedSampleData` を付けると、ストアが空の場合のみサンプルデータ（企業6社・予定・提出物・プロフィール1件）が投入されます。
 
 ```sh
 xcrun simctl launch <device> com.towa.offerbound -seedSampleData
