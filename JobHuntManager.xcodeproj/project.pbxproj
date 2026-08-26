@@ -17,6 +17,7 @@
 		8DFE434DD7CC2B75952424EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FB7E2F63726468B336CF914 /* Assets.xcassets */; };
 		8E830270848EC2E6F5819AC6 /* CompanyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A595494C82B943DE1836E08D /* CompanyListView.swift */; };
 		9ACDE7F11BEDC9655B709B9C /* CompanyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93708CAEBC21F29666451C70 /* CompanyDetailView.swift */; };
+		9CFDECCC232FA3338CCDF1B9 /* SelectionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AF67493D199CAFBFC583F /* SelectionStatusTests.swift */; };
 		A3E2CA8FBF9E8553E24E4464 /* DayMarkersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC3DF1ED0BCECB4FD2E1FA /* DayMarkersTests.swift */; };
 		A5F0D18E45EBC3215B16A8B1 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C587E9242B096631E9B357 /* EventEditView.swift */; };
 		B0401EE2A7CCE2E47E0A6225 /* Submission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A4CBA1A1324CFEAB67D111 /* Submission.swift */; };
@@ -50,6 +51,7 @@
 		228E075A6B7AE6AE318A5BD1 /* JobHuntManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobHuntManagerApp.swift; sourceTree = "<group>"; };
 		26C587E9242B096631E9B357 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
 		277377F458276B770D74C4E5 /* RelationshipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipTests.swift; sourceTree = "<group>"; };
+		287AF67493D199CAFBFC583F /* SelectionStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionStatusTests.swift; sourceTree = "<group>"; };
 		39B886F96DF0F15ED969A624 /* DateFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormattingTests.swift; sourceTree = "<group>"; };
 		3B0812E51B13B7E1275660D2 /* MonthGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGrid.swift; sourceTree = "<group>"; };
 		3FB7E2F63726468B336CF914 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				81DC3DF1ED0BCECB4FD2E1FA /* DayMarkersTests.swift */,
 				1375B3A6551F6684BBCF1A68 /* MonthGridTests.swift */,
 				277377F458276B770D74C4E5 /* RelationshipTests.swift */,
+				287AF67493D199CAFBFC583F /* SelectionStatusTests.swift */,
 				6AEAEF7215AEE892EB12222E /* SubmissionTests.swift */,
 			);
 			path = JobHuntManagerTests;
@@ -318,6 +321,7 @@
 				A3E2CA8FBF9E8553E24E4464 /* DayMarkersTests.swift in Sources */,
 				EFD59DBF900C1BE3BA44EF6F /* MonthGridTests.swift in Sources */,
 				0D89C433C6F3491152A8456B /* RelationshipTests.swift in Sources */,
+				9CFDECCC232FA3338CCDF1B9 /* SelectionStatusTests.swift in Sources */,
 				5BC5CBE112D9FB9F032BD36A /* SubmissionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

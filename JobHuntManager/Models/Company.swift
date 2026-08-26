@@ -14,7 +14,14 @@ enum SelectionStatus: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String { rawValue }
+    /// 表示用のラベル。`rawValue` は永続化値なので変えず、表示の差異はここで吸収する
+    var label: String {
+        switch self {
+        case .writtenTest: return "テスト"
+        case .interviewing: return "面接"
+        default: return rawValue
+        }
+    }
 
     /// 一覧などでの並び順
     var sortOrder: Int {
