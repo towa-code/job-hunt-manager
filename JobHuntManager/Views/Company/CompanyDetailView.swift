@@ -3,6 +3,7 @@ import SwiftData
 
 struct CompanyDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Bindable var company: Company
 
     @State private var isShowingEditCompany = false
@@ -10,6 +11,7 @@ struct CompanyDetailView: View {
     @State private var isShowingAddSubmission = false
     @State private var editingEvent: JobEvent?
     @State private var editingSubmission: Submission?
+    @State private var isShowingDeleteConfirmation = false
 
     private var sortedEvents: [JobEvent] {
         company.events.sorted { $0.date < $1.date }
@@ -27,6 +29,33 @@ struct CompanyDetailView: View {
             return URL(string: trimmed)
         }
         return URL(string: "https://\(trimmed)")
+    }
+
+    /// 削除確認ダイアログの本文。子データがあるときだけ件数を添える
+    private var deleteConfirmationMessage: String {
+        var children: [String] = []
+        if !company.events.isEmpty { children.append("予定 \(company.events.count)件") }
+        if !company.submissions.isEmpty { children.append("提出物 \(company.submissions.count)件") }
+
+        var message = "「\(company.name)」を削除します。"
+        if !children.isEmpty {
+            message += "紐づく\(children.joined(separator: "・"))も削除されます。"
+        }
+        return message + "この操作は取り消せません。"
+    }
+
+    /// Listのbodyが型チェックの予算を超えるため、削除セクションは切り出す
+    private var deleteSection: some View {
+        Section {
+            Button(role: .destructive) {
+                isShowingDeleteConfirmation = true
+            } label: {
+                Label("この企業を削除", systemImage: "trash")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .foregroundStyle(Color.statusRed)
+            }
+            .listRowBackground(Color.surfaceRaised)
+        }
     }
 
     var body: some View {
@@ -166,6 +195,8 @@ struct CompanyDetailView: View {
                     .font(.heading(13))
                     .foregroundStyle(.textSecondary)
             }
+
+            deleteSection
         }
         .scrollContentBackground(.hidden)
         .background(AppBackground())
@@ -191,6 +222,25 @@ struct CompanyDetailView: View {
         }
         .sheet(item: $editingSubmission) { submission in
             SubmissionEditView(company: company, submission: submission)
+        }
+        .confirmationDialog(
+            "この企業を削除しますか？",
+            isPresented: $isShowingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("削除", role: .destructive) { deleteCompany() }
+            Button("キャンセル", role: .cancel) {}
+        } message: {
+            Text(deleteConfirmationMessage)
+        }
+    }
+
+    /// 先に画面を閉じてから削除する。逆順にすると、削除済みの `company` を
+    /// まだ表示中のこのViewが参照してクラッシュしうる
+    private func deleteCompany() {
+        dismiss()
+        DispatchQueue.main.async {
+            modelContext.delete(company)
         }
     }
 
