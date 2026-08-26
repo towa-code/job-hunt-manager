@@ -32,9 +32,13 @@ struct EventEditView: View {
                     TextField("場所・URL（任意）", text: $place)
                 }
 
-                Section("メモ") {
+                Section {
                     TextEditor(text: $memo)
                         .frame(minHeight: 80)
+                } header: {
+                    Text("メモ")
+                        .font(.heading(13))
+                        .foregroundStyle(.textPrimary)
                 }
             }
             .scrollContentBackground(.hidden)

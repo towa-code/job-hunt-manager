@@ -36,9 +36,13 @@ struct SubmissionEditView: View {
                     }
                 }
 
-                Section("本文メモ") {
+                Section {
                     TextEditor(text: $bodyMemo)
                         .frame(minHeight: 120)
+                } header: {
+                    Text("本文メモ")
+                        .font(.heading(13))
+                        .foregroundStyle(.textPrimary)
                 }
             }
             .scrollContentBackground(.hidden)

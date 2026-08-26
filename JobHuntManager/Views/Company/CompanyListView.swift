@@ -27,6 +27,18 @@ struct CompanyListView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                PageHeader(title: "企業") {
+                    Button {
+                        isShowingAddSheet = true
+                    } label: {
+                        Label("追加", systemImage: "plus")
+                    }
+                    .buttonStyle(PrimaryCapsuleButtonStyle())
+                }
+
+                SearchField(text: $searchText, prompt: "企業名・業界で検索")
+                    .padding(.horizontal, 16)
+
                 FilterChipsRow(selection: $statusFilter)
                     .padding(.vertical, 8)
 
@@ -57,25 +69,44 @@ struct CompanyListView: View {
                 }
             }
             .background(AppBackground())
-            .navigationTitle("企業")
-            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "企業名・業界で検索")
             .navigationDestination(for: Company.self) { company in
                 CompanyDetailView(company: company)
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowingAddSheet = true
-                    } label: {
-                        Label("追加", systemImage: "plus")
-                    }
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $isShowingAddSheet) {
                 CompanyEditView(company: nil)
             }
         }
         .tint(.signal)
+    }
+}
+
+/// ヘッダー直下の検索欄
+private struct SearchField: View {
+    @Binding var text: String
+    let prompt: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.textSecondary)
+
+            TextField(prompt, text: $text)
+                .font(.subheadline)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .cardStyle()
     }
 }
 
@@ -146,13 +177,23 @@ private struct CompanyRow: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(company.name)
-                    .font(.heading(17))
-                    .foregroundStyle(.textPrimary)
+                HStack(spacing: 6) {
+                    Text(company.name)
+                        .font(.heading(17))
+                        .foregroundStyle(.textPrimary)
+                    if company.kind == .internship {
+                        KindBadgeView(kind: company.kind)
+                    }
+                }
                 if !company.industry.isEmpty {
                     Text(company.industry)
                         .font(.caption)
                         .foregroundStyle(.textSecondary)
+                }
+                if let period = company.internPeriodLabel {
+                    Text(period)
+                        .font(.caption)
+                        .foregroundStyle(Color.internBadge)
                 }
                 PriorityDotsView(priority: company.priority)
             }

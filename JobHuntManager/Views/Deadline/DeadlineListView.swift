@@ -31,40 +31,50 @@ struct DeadlineListView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if filteredSubmissions.isEmpty {
-                    ContentUnavailableView(
-                        showOnlyUnsubmitted ? "未提出の提出物はありません" : "提出物がありません",
-                        systemImage: showOnlyUnsubmitted ? "checkmark.circle" : "doc.text",
-                        description: Text(
-                            showOnlyUnsubmitted
-                                ? "すべて提出済みです。おつかれさまでした！"
-                                : "企業詳細から提出物を追加しましょう"
-                        )
-                    )
-                    .background(AppBackground())
-                } else {
-                    List {
-                        deadlineSection(title: "期限超過", items: overdue, accent: .statusRed)
-                        deadlineSection(title: "3日以内", items: soon, accent: .signal)
-                        deadlineSection(title: "それ以降", items: later, accent: nil)
-                        deadlineSection(title: "提出済", items: done, accent: .statusGreen)
+            VStack(spacing: 0) {
+                PageHeader(title: "締切") {
+                    Menu {
+                        Picker("表示", selection: $showOnlyUnsubmitted.animation()) {
+                            Text("未提出のみ").tag(true)
+                            Text("すべて").tag(false)
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(showOnlyUnsubmitted ? "未提出のみ" : "すべて")
+                            Image(systemName: "chevron.down")
+                        }
+                        .secondaryCapsule()
                     }
-                    .scrollContentBackground(.hidden)
-                    .background(AppBackground())
+                }
+
+                Group {
+                    if filteredSubmissions.isEmpty {
+                        ContentUnavailableView(
+                            showOnlyUnsubmitted ? "未提出の提出物はありません" : "提出物がありません",
+                            systemImage: showOnlyUnsubmitted ? "checkmark.circle" : "doc.text",
+                            description: Text(
+                                showOnlyUnsubmitted
+                                    ? "すべて提出済みです。おつかれさまでした！"
+                                    : "企業詳細から提出物を追加しましょう"
+                            )
+                        )
+                    } else {
+                        List {
+                            deadlineSection(title: "期限超過", items: overdue, accent: .statusRed)
+                            deadlineSection(title: "3日以内", items: soon, accent: .signal)
+                            deadlineSection(title: "それ以降", items: later, accent: nil)
+                            deadlineSection(title: "提出済", items: done, accent: .statusGreen)
+                        }
+                        .scrollContentBackground(.hidden)
+                .contentMargins(.top, 4, for: .scrollContent)
+                    }
                 }
             }
-            .navigationTitle("締切")
+            .background(AppBackground())
             .navigationDestination(for: Company.self) { company in
                 CompanyDetailView(company: company)
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Toggle("未提出のみ", isOn: $showOnlyUnsubmitted.animation())
-                        .toggleStyle(.button)
-                        .tint(.signal)
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
         }
         .tint(.signal)
     }
@@ -106,7 +116,7 @@ struct DeadlineListView: View {
                     }
                     Text(title)
                         .font(.heading(13))
-                        .foregroundStyle(accent ?? .textSecondary)
+                        .foregroundStyle(accent ?? .textPrimary)
                 }
             }
         }
