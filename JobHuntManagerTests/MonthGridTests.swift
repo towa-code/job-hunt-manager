@@ -16,13 +16,31 @@ final class MonthGridTests: XCTestCase {
         return calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour))!
     }
 
-    /// グリッドの高さを月ごとに変えないため、週数にかかわらず常に 42 マス
-    func testGridAlwaysHasFortyTwoDays() {
+    /// マス数は表示月を収めるのに必要な週数ぶんだけ。月によって 4〜6 週で変わる
+    func testGridHasOnlyTheWeeksTheMonthNeeds() {
         let calendar = sundayFirstCalendar()
 
-        // 2026年8月は6週にまたがる / 2026年2月は4週で収まる
+        // 2026/8/1 は土曜なので前に6日ぶら下がり、31日と合わせて6週
         XCTAssertEqual(MonthGrid(containing: date(2026, 8, 15), calendar: calendar).days.count, 42)
-        XCTAssertEqual(MonthGrid(containing: date(2026, 2, 15), calendar: calendar).days.count, 42)
+        // 2026/9/1 は火曜。前に2日＋30日で32日ぶんなので5週で収まる
+        XCTAssertEqual(MonthGrid(containing: date(2026, 9, 15), calendar: calendar).days.count, 35)
+        // 2026/2/1 は日曜で28日ちょうど。4週で収まる
+        XCTAssertEqual(MonthGrid(containing: date(2026, 2, 15), calendar: calendar).days.count, 28)
+    }
+
+    /// 表示月の日が1つも入らない週は作らない（9月の最終行が10月だけになるのを防ぐ）
+    func testGridNeverEndsWithAWeekOutsideTheMonth() {
+        let calendar = sundayFirstCalendar()
+
+        for month in 1...12 {
+            let grid = MonthGrid(containing: date(2026, month, 15), calendar: calendar)
+            let lastWeek = grid.days.suffix(7)
+
+            XCTAssertTrue(
+                lastWeek.contains { grid.isInDisplayedMonth($0) },
+                "2026年\(month)月の最終週に表示月の日が1つもない"
+            )
+        }
     }
 
     /// 先頭マスは月初の直前（または当日）の週開始曜日。2026/8/1 は土曜なので日曜始まりでは 7/26

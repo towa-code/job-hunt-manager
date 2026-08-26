@@ -47,6 +47,22 @@ struct JobHuntManagerApp: App {
         context.insert(hinata)
         context.insert(kaede)
 
+        // カレンダーの帯を確かめられるよう、実施期間が重なり、かつ週をまたぐインターンを入れておく
+        let midori = Company(name: "ミドリ物産", industry: "食品", status: .applied, priority: 2)
+        midori.kind = .internship
+        midori.internStartDate = days(-4)
+        midori.internEndDate = days(1)
+        midori.internFormat = .inPerson
+
+        let kohaku = Company(name: "コハク工業", industry: "メーカー", status: .interested, priority: 1)
+        kohaku.kind = .internship
+        kohaku.internStartDate = days(-1)
+        kohaku.internEndDate = days(4)
+        kohaku.internFormat = .online
+
+        context.insert(midori)
+        context.insert(kohaku)
+
         context.insert(JobEvent(title: "二次面接", type: .interview, date: days(2, hour: 14), place: "本社 12F", company: sakura))
         context.insert(JobEvent(title: "OB訪問", type: .obVisit, date: days(5, hour: 18), place: "オンライン", company: sakura))
         context.insert(JobEvent(title: "Webテスト", type: .test, date: days(4, hour: 9), company: hinata))
