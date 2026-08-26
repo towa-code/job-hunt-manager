@@ -80,8 +80,11 @@ struct CalendarView: View {
                 changeMonth(by: -1)
             } label: {
                 Image(systemName: "chevron.left")
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .frame(width: 44, height: 44)
+            // List の行の中では、既定スタイルだと行全体が1つのタップ対象になって個々のボタンに届かない
+            .buttonStyle(.borderless)
 
             Spacer()
 
@@ -96,8 +99,11 @@ struct CalendarView: View {
                 changeMonth(by: 1)
             } label: {
                 Image(systemName: "chevron.right")
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
             }
-            .frame(width: 44, height: 44)
+            // List の行の中では、既定スタイルだと行全体が1つのタップ対象になって個々のボタンに届かない
+            .buttonStyle(.borderless)
         }
     }
 
