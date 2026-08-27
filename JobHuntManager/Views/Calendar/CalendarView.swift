@@ -10,6 +10,8 @@ struct CalendarView: View {
     @State private var selectedDay: Date? = Calendar.current.startOfDay(for: Date())
     /// インターンの帯をタップしたときの遷移先
     @State private var selectedCompany: Company?
+    /// 月ページ1枚分の幅。0 = 未計測
+    @State private var pageWidth: CGFloat = 0
 
     private let calendar = Calendar.current
 
@@ -17,12 +19,18 @@ struct CalendarView: View {
         DayMarkers.markers(events: events, submissions: submissions, calendar: calendar)
     }
 
-    /// インターンの帯を週番号で引けるようにしておく
-    private var internBars: [Int: [InternBar]] {
-        Dictionary(
-            grouping: InternSchedule.bars(companies: companies, grid: grid, calendar: calendar),
-            by: \.weekIndex
-        )
+    /// 前月・当月・翌月の3ページ分。スワイプ中に隣の月が見えるので、まとめて用意しておく
+    private var pages: [MonthPage] {
+        [-1, 0, 1].map { months in
+            let pageGrid = months == 0 ? grid : grid.adding(months: months)
+            return MonthPage(
+                grid: pageGrid,
+                bars: Dictionary(
+                    grouping: InternSchedule.bars(companies: companies, grid: pageGrid, calendar: calendar),
+                    by: \.weekIndex
+                )
+            )
+        }
     }
 
     private var internshipsOnSelectedDay: [Company] {
@@ -54,10 +62,12 @@ struct CalendarView: View {
                         VStack(spacing: 12) {
                             monthHeader
                             weekdayHeader
-                            monthGrid
+                            MonthPager(pages: pages, pageWidth: pageWidth) { months in
+                                showMonth(offsetBy: months)
+                            } content: { page in
+                                monthGrid(of: page)
+                            }
                         }
-                        .contentShape(Rectangle())
-                        .gesture(monthSwipe)
                         .cardStyle()
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
@@ -132,29 +142,40 @@ struct CalendarView: View {
                     .frame(maxWidth: .infinity)
             }
         }
+        // 月ページの幅はここで測る。カード幅いっぱいに広がる既存の行なので、
+        // 計測のために新しく貪欲なフレームを足さずに済む
+        .background {
+            GeometryReader { proxy in
+                Color.clear
+                    .onChange(of: proxy.size.width, initial: true) { _, width in
+                        // 幅が未確定の計測パスでは inf が来る。取り込むと配置計算が NaN になる
+                        guard width.isFinite, width > 0 else { return }
+                        pageWidth = width
+                    }
+            }
+        }
     }
 
-    private var monthGrid: some View {
-        VStack(spacing: 6) {
-            ForEach(0..<(grid.days.count / 7), id: \.self) { weekIndex in
-                weekRow(at: weekIndex)
+    private func monthGrid(of page: MonthPage) -> some View {
+        VStack(spacing: MonthPage.rowSpacing) {
+            ForEach(0..<(page.grid.days.count / 7), id: \.self) { weekIndex in
+                weekRow(of: page, at: weekIndex)
             }
         }
     }
 
     /// 1週分。帯の1段目は日付セルの下端の余白に重ねるので、行が伸びるのは2段目以降だけ
-    private func weekRow(at weekIndex: Int) -> some View {
-        let days = grid.days[(weekIndex * 7)..<(weekIndex * 7 + 7)]
-        let bars = internBars[weekIndex] ?? []
-        let laneCount = (bars.map(\.lane).max()).map { $0 + 1 } ?? 0
-        let extraHeight = CGFloat(max(0, laneCount - 1)) * InternBarLanes.lanePitch
+    private func weekRow(of page: MonthPage, at weekIndex: Int) -> some View {
+        let days = page.grid.days[(weekIndex * 7)..<(weekIndex * 7 + 7)]
+        let bars = page.bars[weekIndex] ?? []
+        let extraHeight = MonthPage.extraHeight(ofLanes: bars)
 
         // 帯の列と正確に揃えるため、日付の段も間隔なしの7等分にする
         return HStack(spacing: 0) {
             ForEach(days, id: \.self) { day in
                 DayCell(
                     day: day,
-                    isInDisplayedMonth: grid.isInDisplayedMonth(day),
+                    isInDisplayedMonth: page.grid.isInDisplayedMonth(day),
                     isToday: calendar.isDateInToday(day),
                     isSelected: selectedDay == day,
                     markers: markers[day]
@@ -162,7 +183,7 @@ struct CalendarView: View {
                 .frame(maxWidth: .infinity)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    guard grid.isInDisplayedMonth(day) else { return }
+                    guard page.grid.isInDisplayedMonth(day) else { return }
                     withAnimation(.easeOut(duration: 0.15)) {
                         selectedDay = day
                     }
@@ -228,29 +249,162 @@ struct CalendarView: View {
         }
     }
 
-    /// カード上の横スワイプで月を送る
-    ///
-    /// `List` の縦スクロールと取り合いになるので、横方向が優勢なドラッグだけ拾う。
-    /// `minimumDistance` があるため、日付セルや帯のタップは従来どおり通る。
-    private var monthSwipe: some Gesture {
-        DragGesture(minimumDistance: 24)
-            .onEnded { value in
-                guard abs(value.translation.width) > abs(value.translation.height) else { return }
-                changeMonth(by: value.translation.width < 0 ? 1 : -1)
-            }
-    }
-
     /// 今日を含む月を出し、今日を選択する
     private func showToday() {
         grid = MonthGrid(containing: Date())
         selectedDay = calendar.startOfDay(for: Date())
     }
 
+    /// ヘッダの矢印から月を送る（スワイプは `MonthPager` 側でアニメーションを付ける）
     private func changeMonth(by months: Int) {
         withAnimation {
-            grid = grid.adding(months: months)
-            // 表示月が変われば選択日は月外になるので解除する
-            selectedDay = nil
+            showMonth(offsetBy: months)
+        }
+    }
+
+    private func showMonth(offsetBy months: Int) {
+        grid = grid.adding(months: months)
+        // 表示月が変われば選択日は月外になるので解除する
+        selectedDay = nil
+    }
+}
+
+/// カレンダー1ページ分（1か月）の描画データ
+///
+/// 帯の計算はスワイプ中に毎フレーム走らせたくないので、`MonthPager` へ渡す前に済ませておく。
+private struct MonthPage: Identifiable {
+    /// 週行どうしの間隔
+    static let rowSpacing: CGFloat = 6
+
+    let grid: MonthGrid
+    /// 週番号で引けるインターンの帯
+    let bars: [Int: [InternBar]]
+
+    var id: Date { grid.firstOfMonth }
+
+    /// ページ全体の高さ。月によって週数も帯の段数も変わるので、めくる前に求めておく
+    var height: CGFloat {
+        let weekCount = grid.days.count / 7
+        let extra = (0..<weekCount).reduce(CGFloat.zero) { total, weekIndex in
+            total + Self.extraHeight(ofLanes: bars[weekIndex] ?? [])
+        }
+        return CGFloat(weekCount) * DayCell.height
+            + CGFloat(weekCount - 1) * Self.rowSpacing
+            + extra
+    }
+
+    /// 帯の2段目以降ぶんだけ週行が伸びる（1段目は日付セルの下端の余白に重なる）
+    static func extraHeight(ofLanes bars: [InternBar]) -> CGFloat {
+        let laneCount = (bars.map(\.lane).max()).map { $0 + 1 } ?? 0
+        return CGFloat(max(0, laneCount - 1)) * InternBarLanes.lanePitch
+    }
+}
+
+/// 前月・当月・翌月を横に並べ、スワイプに追従させて月を送るページャ
+///
+/// ドラッグ量を親に持たせると1フレームごとに `CalendarView` の body（＝帯やマーカーの集計）が
+/// 走ってしまうので、追従に使う状態はこの View に閉じ込める。
+private struct MonthPager<Content: View>: View {
+    /// 前月・当月・翌月の3件。中央が表示中の月
+    let pages: [MonthPage]
+    /// 月ページ1枚分の幅。0 = 未計測
+    let pageWidth: CGFloat
+    /// 月が確定したときに呼ぶ（-1 = 前月, +1 = 翌月）
+    let onCommit: (Int) -> Void
+    @ViewBuilder let content: (MonthPage) -> Content
+
+    /// 指を離してから月が確定するまでのぶんのずれ
+    @State private var settleOffset: CGFloat = 0
+    @GestureState private var drag = DragState.idle
+
+    /// `List` の縦スクロールと取り合いになるので、最初に横が優勢だと判定できたドラッグだけ拾う
+    private enum DragState {
+        case idle
+        case horizontal(CGFloat)
+        /// 縦スクロールに譲ったので、このドラッグではもう追従しない
+        case vertical
+
+        var translation: CGFloat {
+            if case .horizontal(let width) = self { return width }
+            return 0
+        }
+    }
+
+    private var offset: CGFloat {
+        drag.translation + settleOffset
+    }
+
+    /// めくり進んだぶんだけ行き先の高さへ寄せる（週数が違う月へ移ってもカードが跳ねない）
+    private var height: CGFloat {
+        let current = pages[1].height
+        guard pageWidth > 0, offset != 0 else { return current }
+        let destination = offset > 0 ? pages[0].height : pages[2].height
+        return current + (destination - current) * min(abs(offset) / pageWidth, 1)
+    }
+
+    var body: some View {
+        Group {
+            // ここで `maxWidth: .infinity` を使わないのが要点。幅未確定の計測パスで
+            // フレームも中身も inf になり、配置計算が NaN になって落ちる
+            if pageWidth > 0 {
+                HStack(alignment: .top, spacing: 0) {
+                    ForEach(pages) { page in
+                        content(page)
+                            .frame(width: pageWidth)
+                    }
+                }
+                .offset(x: -pageWidth + offset)
+                .frame(width: pageWidth, height: height, alignment: .topLeading)
+                .clipped()
+            } else {
+                // 幅が測れるまでは当月だけを素で出す（従来と同じ並び）
+                content(pages[1])
+            }
+        }
+        .contentShape(Rectangle())
+        // `minimumDistance` があるため、日付セルや帯のタップは従来どおり通る
+        .gesture(DragGesture(minimumDistance: 12).updating($drag) { value, state, _ in
+            switch state {
+            case .idle:
+                state = abs(value.translation.width) > abs(value.translation.height)
+                    ? .horizontal(value.translation.width)
+                    : .vertical
+            case .horizontal:
+                state = .horizontal(value.translation.width)
+            case .vertical:
+                break
+            }
+        }.onEnded(settle))
+    }
+
+    /// 指を離したあと、隣の月まで送るか元の位置へ戻すかを決めて畳む
+    private func settle(_ value: DragGesture.Value) {
+        guard abs(value.translation.width) > abs(value.translation.height) else { return }
+
+        // 1/3 を超えて動かしたか、勢いよく弾いたら送る
+        let turns = abs(value.translation.width) > pageWidth / 3
+            || abs(value.predictedEndTranslation.width) > pageWidth
+        let months = turns ? (value.translation.width < 0 ? 1 : -1) : 0
+
+        // 万一まだ幅を測れていなければ、追従なしでも月送りだけは効かせる
+        guard pageWidth > 0 else {
+            if months != 0 { onCommit(months) }
+            return
+        }
+
+        // 離した瞬間に @GestureState が 0 に戻るので、ずれをこちらへ引き継いでから動かす
+        settleOffset = value.translation.width
+        withAnimation(.snappy(duration: 0.25, extraBounce: 0)) {
+            settleOffset = CGFloat(-months) * pageWidth
+        } completion: {
+            guard months != 0 else { return }
+            // 送り先のページが中央に来るだけで見た目は変わらないので、アニメーションを止めて入れ替える
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                onCommit(months)
+                settleOffset = 0
+            }
         }
     }
 }
